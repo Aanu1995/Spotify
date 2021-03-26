@@ -30,6 +30,9 @@
 		CEBFD712260A455700619DB1 /* AudioTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBFD711260A455700619DB1 /* AudioTrack.swift */; };
 		CEBFD715260A456200619DB1 /* Artist.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBFD714260A456200619DB1 /* Artist.swift */; };
 		CEBFD718260A456C00619DB1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBFD717260A456C00619DB1 /* User.swift */; };
+		CEDA926A260DE412000A9542 /* AuthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDA9269260DE412000A9542 /* AuthResponse.swift */; };
+		CEDA926E260DEFE4000A9542 /* Dialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDA926D260DEFE4000A9542 /* Dialog.swift */; };
+		CEE8F2BD260BB3AF005FF46A /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE8F2BC260BB3AF005FF46A /* Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +61,9 @@
 		CEBFD711260A455700619DB1 /* AudioTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioTrack.swift; sourceTree = "<group>"; };
 		CEBFD714260A456200619DB1 /* Artist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Artist.swift; sourceTree = "<group>"; };
 		CEBFD717260A456C00619DB1 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		CEDA9269260DE412000A9542 /* AuthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResponse.swift; sourceTree = "<group>"; };
+		CEDA926D260DEFE4000A9542 /* Dialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dialog.swift; sourceTree = "<group>"; };
+		CEE8F2BC260BB3AF005FF46A /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,12 +96,13 @@
 		CE4ABF73260927D000A1D9A3 /* Spotify */ = {
 			isa = PBXGroup;
 			children = (
+				CEDA926C260DEF6C000A9542 /* Utils */,
+				CE4ABF8C260927DC00A1D9A3 /* Models */,
 				CE4ABF922609282F00A1D9A3 /* ViewModels */,
 				CE4ABF912609282700A1D9A3 /* Managers */,
 				CE4ABF90260927F100A1D9A3 /* Resources */,
 				CE4ABF8F260927EB00A1D9A3 /* Views */,
 				CE4ABF8E260927E200A1D9A3 /* Controllers */,
-				CE4ABF8C260927DC00A1D9A3 /* Models */,
 				CE4ABF85260927D300A1D9A3 /* Info.plist */,
 				CE4ABF7D260927D000A1D9A3 /* Spotify.xcdatamodeld */,
 			);
@@ -109,6 +116,7 @@
 				CEBFD711260A455700619DB1 /* AudioTrack.swift */,
 				CEBFD714260A456200619DB1 /* Artist.swift */,
 				CEBFD717260A456C00619DB1 /* User.swift */,
+				CEDA9269260DE412000A9542 /* AuthResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -136,6 +144,7 @@
 				CE4ABF74260927D000A1D9A3 /* AppDelegate.swift */,
 				CE4ABF76260927D000A1D9A3 /* SceneDelegate.swift */,
 				CE4ABF80260927D300A1D9A3 /* Assets.xcassets */,
+				CEE8F2BC260BB3AF005FF46A /* Extension.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -180,6 +189,14 @@
 				CEBFD702260A446D00619DB1 /* SearchResultViewController.swift */,
 			);
 			name = Others;
+			sourceTree = "<group>";
+		};
+		CEDA926C260DEF6C000A9542 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				CEDA926D260DEFE4000A9542 /* Dialog.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -266,11 +283,14 @@
 				CEBFD70F260A453700619DB1 /* Playlist.swift in Sources */,
 				CEBFD6FA260A438800619DB1 /* ProfileViewController.swift in Sources */,
 				CEBFD6F1260A433B00619DB1 /* AuthViewController.swift in Sources */,
+				CEDA926E260DEFE4000A9542 /* Dialog.swift in Sources */,
+				CEE8F2BD260BB3AF005FF46A /* Extension.swift in Sources */,
 				CE4ABF9D2609312E00A1D9A3 /* LibraryViewController.swift in Sources */,
 				CE4ABF97260930CF00A1D9A3 /* TabBarViewController.swift in Sources */,
 				CE4ABF77260927D000A1D9A3 /* SceneDelegate.swift in Sources */,
 				CEBFD715260A456200619DB1 /* Artist.swift in Sources */,
 				CEBFD70C260A451500619DB1 /* HapticManager.swift in Sources */,
+				CEDA926A260DE412000A9542 /* AuthResponse.swift in Sources */,
 				CEBFD718260A456C00619DB1 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
