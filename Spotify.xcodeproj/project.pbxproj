@@ -32,6 +32,7 @@
 		CEBFD718260A456C00619DB1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBFD717260A456C00619DB1 /* User.swift */; };
 		CEDA926A260DE412000A9542 /* AuthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDA9269260DE412000A9542 /* AuthResponse.swift */; };
 		CEDA926E260DEFE4000A9542 /* Dialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDA926D260DEFE4000A9542 /* Dialog.swift */; };
+		CEDA9271260E0219000A9542 /* PrivateKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDA9270260E0219000A9542 /* PrivateKeys.swift */; };
 		CEE8F2BD260BB3AF005FF46A /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE8F2BC260BB3AF005FF46A /* Extension.swift */; };
 /* End PBXBuildFile section */
 
@@ -63,6 +64,7 @@
 		CEBFD717260A456C00619DB1 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		CEDA9269260DE412000A9542 /* AuthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResponse.swift; sourceTree = "<group>"; };
 		CEDA926D260DEFE4000A9542 /* Dialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dialog.swift; sourceTree = "<group>"; };
+		CEDA9270260E0219000A9542 /* PrivateKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKeys.swift; sourceTree = "<group>"; };
 		CEE8F2BC260BB3AF005FF46A /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -155,6 +157,7 @@
 				CEBFD705260A44EC00619DB1 /* AuthManager.swift */,
 				CEBFD708260A44FA00619DB1 /* ApiService.swift */,
 				CEBFD70B260A451500619DB1 /* HapticManager.swift */,
+				CEDA9270260E0219000A9542 /* PrivateKeys.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -290,6 +293,7 @@
 				CE4ABF77260927D000A1D9A3 /* SceneDelegate.swift in Sources */,
 				CEBFD715260A456200619DB1 /* Artist.swift in Sources */,
 				CEBFD70C260A451500619DB1 /* HapticManager.swift in Sources */,
+				CEDA9271260E0219000A9542 /* PrivateKeys.swift in Sources */,
 				CEDA926A260DE412000A9542 /* AuthResponse.swift in Sources */,
 				CEBFD718260A456C00619DB1 /* User.swift in Sources */,
 			);
