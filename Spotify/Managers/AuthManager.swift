@@ -13,11 +13,7 @@ final class AuthManager {
     
     private init () {}
     
-    
-    
     struct Constants {
-        static let clientId = "f31b0df089d84ae5a377152080005fd1"
-        static let clientSecret = "6d811a40db5a4c818c2206a8e440bbc1"
         static let tokenAPIURL = "https://accounts.spotify.com/api/token"
         static let redirectURL = "https://www.example.com"
     }
