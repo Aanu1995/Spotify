@@ -6,3 +6,17 @@
 //
 
 import Foundation
+
+struct UserProfile: Codable {
+    let id: String
+    let country: String
+    let display_name: String
+    let email: String
+    let external_urls: [String: String]
+    let product: String
+    let images: [UserImage]
+    
+    struct UserImage: Codable {
+        let url: String?
+    }
+}

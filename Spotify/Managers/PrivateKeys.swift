@@ -8,6 +8,6 @@
 import Foundation
 
 struct PrivateKeys {
-    static let clientId = ""
-    static let clientSecret = ""
+    static let clientId = "f31b0df089d84ae5a377152080005fd1"
+    static let clientSecret = "6d811a40db5a4c818c2206a8e440bbc1"
 }

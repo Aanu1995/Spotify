@@ -11,7 +11,7 @@ struct AuthResponse: Codable {
     
     let accessToken: String
     let tokenType: String
-    let refreshToken: String
+    let refreshToken: String?
     let expiresIn: Int
     
     enum CodingKeys: String, CodingKey {

@@ -101,7 +101,22 @@ final class AuthManager {
         }
     }
     
-    public func refreshIfNeeded(completionHandler: @escaping (Bool) -> Void) {
+    public func withValidToken (completion: @escaping (String?) -> Void){
+        if shouldRefreshToken {
+           
+            self.refreshIfNeeded { [weak self] (success) in
+                if success, let token = self?.accessToken {
+                    completion(token)
+                } else {
+                    completion(nil)
+                }
+            }
+        } else if let token = accessToken {
+            completion(token)
+        }
+    }
+    
+    private func refreshIfNeeded(completionHandler: @escaping (Bool) -> Void) {
         guard shouldRefreshToken else {
             completionHandler(true)
             return
@@ -122,7 +137,9 @@ final class AuthManager {
     
     private func cacheToken(response: AuthResponse) {
         UserDefaults.standard.setValue(response.accessToken, forKey: "access_token")
-        UserDefaults.standard.setValue(response.refreshToken, forKey: "refreshToken")
+        if let refreshToken = response.refreshToken {
+            UserDefaults.standard.setValue(refreshToken, forKey: "refresh_token")
+        }
         UserDefaults.standard.setValue(Date().addingTimeInterval(TimeInterval(response.expiresIn)), forKey: "expiration_date")
     }
 }

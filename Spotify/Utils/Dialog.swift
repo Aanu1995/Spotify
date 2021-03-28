@@ -14,7 +14,7 @@ protocol Dialog {
 
 extension Dialog {
     
-    func showErrorDialog(title: String, message: String) -> UIAlertController {
+    func showErrorDialog(title: String = "Error", message: String) -> UIAlertController {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
         return alert
