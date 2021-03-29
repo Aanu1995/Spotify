@@ -65,7 +65,7 @@ class ProfileViewController: UIViewController, Dialog {
     
     private func configureModel(with user: UserProfile){
         self.createHeaderForImage(with:user.images.first?.url)
-        models.append("Full Name: \(user.display_name)")
+        models.append("Full Name: \(user.displayName)")
         models.append("Email Address: \(user.email)")
         models.append("Plan: \(user.product)")
     }

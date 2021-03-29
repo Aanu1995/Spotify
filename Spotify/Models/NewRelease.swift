@@ -17,10 +17,20 @@ struct NewRelease: Codable {
 
 struct Album: Codable {
     let name: String
-    let album_type: String
+    let albumType: String
     let artists: [Artist]
-    let available_market: [String]
+    let availableMarkets: [String]
     let images: [ImageModel]
-    let release_date: String
-    let total_tracks: Int
+    let releaseDate: String
+    let totalTracks: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case name
+        case albumType = "album_type"
+        case artists
+        case availableMarkets = "available_market"
+        case images
+        case releaseDate = "release_date"
+        case totalTracks = "total_tracks"
+    }
 }
