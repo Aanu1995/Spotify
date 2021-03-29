@@ -116,9 +116,9 @@ final class AuthManager {
         }
     }
     
-    private func refreshIfNeeded(completionHandler: @escaping (Bool) -> Void) {
+    public func refreshIfNeeded(completionHandler: ((Bool) -> Void)?) {
         guard shouldRefreshToken else {
-            completionHandler(true)
+            completionHandler?(true)
             return
         }
         
@@ -130,7 +130,7 @@ final class AuthManager {
         ]
         getToken(components: components) { (success) in
             DispatchQueue.main.async {
-                completionHandler(success)
+                completionHandler?(success)
             }
         }
     }

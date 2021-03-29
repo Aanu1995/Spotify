@@ -38,7 +38,7 @@ class SettingsViewController: UIViewController {
     }
     
     private func configureModels() {
-        let profileOption = Option(title: "View the profile", handler: { [weak self] in
+        let profileOption = Option(title: "View your profile", handler: { [weak self] in
             DispatchQueue.main.async { self?.viewProfile() }
         })
         let signOutOption = Option(title: "Sign Out", handler: { [weak self] in

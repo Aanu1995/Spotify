@@ -24,6 +24,7 @@ class ApiService {
     struct Constants {
         static let baseAPIURL = "https://api.spotify.com/v1"
         static let currentProfileURL = baseAPIURL + "/me"
+        static let newReleasesURL = baseAPIURL + "/browse/new-releases?limit=50"
     }
     
     func getCurrentUserProfile(completion: @escaping (Result<UserProfile, Error>) -> Void) {
@@ -41,6 +42,29 @@ class ApiService {
                 let decoder = JSONDecoder()
                 do {
                     let result = try decoder.decode(UserProfile.self, from: data)
+                    completion(.success(result))
+                } catch {
+                    return completion(.failure(error))
+                }
+            }
+            task.resume()
+        }
+    }
+    
+    func getNewReleases(completion: @escaping (Result<NewRelease, Error>) -> Void){
+        createRequest(with: URL(string: Constants.newReleasesURL), type: .GET) { (baseRequest) in
+            guard let baseRequest = baseRequest else {
+                return completion(.failure(ApiError.FailToGetData))
+            }
+            
+            let task = URLSession.shared.dataTask(with: baseRequest) { (data, _, error) in
+                guard let data = data else {
+                    return completion(.failure(error!))
+                }
+                
+                let decoder = JSONDecoder()
+                do {
+                    let result = try decoder.decode(NewRelease.self, from: data)
                     completion(.success(result))
                 } catch {
                     return completion(.failure(error))
