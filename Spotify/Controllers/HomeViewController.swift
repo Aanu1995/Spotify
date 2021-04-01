@@ -8,21 +8,24 @@
 import UIKit
 
 enum BrowseSectionType {
-    case newReleases
-    case featurePlaylists
-    case recommendedTracks
+    case newReleases (viewModels: [NewReleaseCellViewModel])
+    case featurePlaylists (viewModels: [FeaturedPlaylistCellViewModel])
+    case recommendedTracks (viewModels: [RecommendationCellViewModel])
 }
 
 class HomeViewController: UIViewController {
     
     // MARK: Properties
     
-    private var collectionView: UICollectionView = UICollectionView(
-        frame: .zero,
-        collectionViewLayout: UICollectionViewCompositionalLayout { (section, _ ) -> NSCollectionLayoutSection? in
-        return HomeViewController.createSectionLayout(section: section)
-      }
-    )
+    private var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(
+            frame: .zero,
+            collectionViewLayout: UICollectionViewCompositionalLayout { (section, _ ) -> NSCollectionLayoutSection? in
+            return HomeViewController.createSectionLayout(section: section)
+          }
+        )
+        return collectionView
+    }()
     
     private let spinner: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView()
@@ -30,17 +33,24 @@ class HomeViewController: UIViewController {
         spinner.hidesWhenStopped = true
         return spinner
     }()
-       
     
+    private var sections: [BrowseSectionType] = []
+    
+    private var albums: [Album] = []
+    private var playlists: [Playlist] = []
+    private var audioTracks: [AudioTrack] = []
+       
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         configureCollectionView()
+        fetchData()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         collectionView.frame = view.bounds
+        spinner.center = view.center
     }
     
     private func configureUI() {
@@ -52,10 +62,12 @@ class HomeViewController: UIViewController {
         view.addSubview(collectionView)
         view.addSubview(spinner)
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(NewReleaseCollectionViewCell.self, forCellWithReuseIdentifier: NewReleaseCollectionViewCell.identifier)
+        collectionView.register(FeaturePlaylistCollectionViewCell.self, forCellWithReuseIdentifier: FeaturePlaylistCollectionViewCell.identifier)
+        collectionView.register(RecommendedTrackCollectionViewCell.self, forCellWithReuseIdentifier: RecommendedTrackCollectionViewCell.identifier)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = .systemBackground
-        
     }
     
     
@@ -64,7 +76,104 @@ class HomeViewController: UIViewController {
         vc.navigationItem.largeTitleDisplayMode = .never
         self.navigationController?.pushViewController(vc, animated: true)
     }
-
+    
+    private func fetchData() {
+        spinner.startAnimating()
+        
+        let group = DispatchGroup()
+        
+        // models
+        var newRelease: NewRelease?
+        var featurePlaylist: FeaturedPlaylist?
+        var recommendation: Recommendation?
+        
+        // fetch data for new releases
+        group.enter()
+        ApiService.shared.getNewReleases { (result) in
+            defer {
+                group.leave()
+            }
+            switch result {
+            case .success(let model):
+                newRelease = model
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        
+        // fetch data for feature playlists
+        group.enter()
+        ApiService.shared.getAllFeaturedPlaylists { (result) in
+            defer {
+                group.leave()
+            }
+            switch result {
+            case .success(let model):
+                featurePlaylist = model
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        
+        // fetch data for recommended tracks
+        group.enter()
+        ApiService.shared.getRecommendedGenres { (result) in
+            switch result {
+            case .success(let model):
+                let genres = model.genres;
+                var seeds = Set<String>()
+                while seeds.count < 5 {
+                    if let randomSeed = genres.randomElement() {
+                        seeds.insert(randomSeed)
+                    }
+                }
+                
+                ApiService.shared.getRecommendations(genres: seeds) { (recommendedResult) in
+                    defer {
+                        group.leave()
+                    }
+                    switch recommendedResult {
+                    case .success(let model):
+                        recommendation = model
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        
+        group.notify(queue: .main) {
+            guard let albums = newRelease?.albums.items,
+                  let playlists = featurePlaylist?.playlists.items,
+                  let tracks = recommendation?.tracks else {
+                return
+            }
+            
+            // configure models
+            self.albums = albums
+            self.playlists = playlists
+            self.audioTracks = tracks
+            self.configureModel()
+        }
+        
+        spinner.stopAnimating()
+    }
+    
+    private func configureModel(){
+        // configure Models
+        let releaseViewModel = self.albums.compactMap { return NewReleaseCellViewModel(name: $0.name, artworkURL: URL(string: $0.images.first?.url ?? ""), noOfTracks: $0.totalTracks, artistName: $0.artists.first?.name ?? "-") }
+        
+        let playlistViewModel = self.playlists.compactMap { return FeaturedPlaylistCellViewModel(name: $0.name, creatorName: $0.owner.displayName, artworkURL: URL(string: $0.images.first?.url ?? ""))}
+        
+        let recommended = self.audioTracks.compactMap { return RecommendationCellViewModel(name: $0.name, artistName: $0.artists.first?.name ?? "-", artworkURL: URL(string: $0.album!.images.first?.url ?? ""))}
+        
+        sections.append(.newReleases(viewModels: releaseViewModel))
+        sections.append(.featurePlaylists(viewModels: playlistViewModel))
+        sections.append(.recommendedTracks(viewModels: recommended))
+        collectionView.reloadData()
+    }
 }
 
 // MARK: Composition Layout methods
@@ -146,22 +255,73 @@ extension HomeViewController {
 
 }
 
-// MARK: UICollection methods override
+// MARK: UICollection methods
 
 extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 3
+        return sections.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        6
+        let type = sections[section]
+        switch type {
+        case .newReleases(let viewModels):
+            return viewModels.count
+        case .featurePlaylists(let viewModels):
+            return viewModels.count
+        case .recommendedTracks(let viewModels):
+            return viewModels.count
+        }
     }
+        
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        cell.backgroundColor = .systemGreen
-        return cell
+        let type = sections[indexPath.section]
+        switch type {
+        case .newReleases(let viewModels):
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewReleaseCollectionViewCell.identifier, for: indexPath) as? NewReleaseCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            cell.configure(with: viewModels[indexPath.row])
+            return cell
+        case .featurePlaylists(let viewModels):
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FeaturePlaylistCollectionViewCell.identifier, for: indexPath) as? FeaturePlaylistCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            cell.configure(with: viewModels[indexPath.row])
+            return cell
+        case .recommendedTracks(let viewModels):
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendedTrackCollectionViewCell.identifier, for: indexPath) as? RecommendedTrackCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            
+            cell.configure(with: viewModels[indexPath.row])
+            return cell
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let section = sections[indexPath.section]
+        
+        switch section {
+        case .newReleases:
+            let album = albums[indexPath.row]
+            let vc = AlbumViewController(album: album)
+            vc.navigationItem.largeTitleDisplayMode = .never
+            navigationController?.pushViewController(vc, animated: true)
+        case .featurePlaylists:
+            let playlist = playlists[indexPath.row]
+            let vc = PlaylistViewController(playlist: playlist)
+            vc.navigationItem.largeTitleDisplayMode = .never
+            navigationController?.pushViewController(vc, animated: true)
+        case .recommendedTracks:
+            let audioTrack = audioTracks[indexPath.row]
+            let vc = AudioTrackViewController(audioTrack: audioTrack)
+            vc.navigationItem.largeTitleDisplayMode = .never
+            navigationController?.pushViewController(vc, animated: true)
+        }
+        collectionView.deselectItem(at: indexPath, animated: true)
     }
     
     

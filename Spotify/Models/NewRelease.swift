@@ -16,6 +16,7 @@ struct NewRelease: Codable {
 }
 
 struct Album: Codable {
+    let id: String
     let name: String
     let albumType: String
     let artists: [Artist]
@@ -25,10 +26,11 @@ struct Album: Codable {
     let totalTracks: Int
     
     enum CodingKeys: String, CodingKey {
+        case id
         case name
         case albumType = "album_type"
         case artists
-        case availableMarkets = "available_market"
+        case availableMarkets = "available_markets"
         case images
         case releaseDate = "release_date"
         case totalTracks = "total_tracks"
