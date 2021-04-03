@@ -10,7 +10,7 @@ import SDWebImage
 
 class ProfileViewController: UIViewController, Dialog {
     
-    // MARK: IBOutlet
+    // MARK: Properties
     
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero)
@@ -19,10 +19,10 @@ class ProfileViewController: UIViewController, Dialog {
         return tableView
     }()
     
-    // MARK: Properties
-    
     var models: [String] = []
 
+    // MARK: Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -34,20 +34,7 @@ class ProfileViewController: UIViewController, Dialog {
         tableView.frame = view.bounds
     }
     
-    private func fetchProfile(){
-        ApiService.shared.getCurrentUserProfile { [weak self] (result) in
-            DispatchQueue.main.async {
-                switch result{
-                case .success(let user):
-                    self?.updateUI(with: user)
-                    break
-                case .failure(_):
-                    self?.showErrorMessage()
-                    break
-                }
-            }
-        }
-    }
+    // MARK: Methods
     
     private func configureUI(){
         title = "Profile"
@@ -68,6 +55,21 @@ class ProfileViewController: UIViewController, Dialog {
         models.append("Full Name: \(user.displayName)")
         models.append("Email Address: \(user.email)")
         models.append("Plan: \(user.product)")
+    }
+    
+    private func fetchProfile(){
+        ApiService.shared.getCurrentUserProfile { [weak self] (result) in
+            DispatchQueue.main.async {
+                switch result{
+                case .success(let user):
+                    self?.updateUI(with: user)
+                    break
+                case .failure(_):
+                    self?.showErrorMessage()
+                    break
+                }
+            }
+        }
     }
     
     private func createHeaderForImage(with urlString: String?){

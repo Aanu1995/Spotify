@@ -61,6 +61,8 @@ class CategoryViewController: UIViewController, Dialog {
         collectionView.frame = view.bounds
     }
     
+    // MARK: Methods
+    
     private func configureUI(){
         title = category.name
         view.backgroundColor = .systemBackground

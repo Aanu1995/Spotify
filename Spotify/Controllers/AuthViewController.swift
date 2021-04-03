@@ -8,7 +8,9 @@
 import UIKit
 import WebKit
 
-class AuthViewController: UIViewController, WKNavigationDelegate {
+class AuthViewController: UIViewController{
+    
+    // MARK: Properties
     
     private let webView: WKWebView = {
         let pref = WKWebpagePreferences()
@@ -43,6 +45,7 @@ class AuthViewController: UIViewController, WKNavigationDelegate {
     
     public var completionHandler: ((Bool) -> Void)?
 
+    
     // MARK: Lifecycle
     
     override func viewDidLoad() {
@@ -63,6 +66,13 @@ class AuthViewController: UIViewController, WKNavigationDelegate {
         webView.frame = view.bounds
         loadingView.frame = CGRect(x: (view.width - 100)/2, y: (view.height - 90)/2, width: 100, height: 90)
     }
+    
+    
+}
+
+// MARK: Webview
+
+extension AuthViewController:  WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         guard let url = webView.url else {

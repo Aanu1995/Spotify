@@ -9,6 +9,8 @@ import UIKit
 
 class WelcomeViewController: UIViewController, Dialog {
     
+    // MARK: Properties
+    
     private let signInButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .white
@@ -19,6 +21,9 @@ class WelcomeViewController: UIViewController, Dialog {
         return button
     }()
 
+    
+    // MARK: Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -34,6 +39,8 @@ class WelcomeViewController: UIViewController, Dialog {
         signInButton.frame = CGRect(x: 20, y: y, width: view.width - 40, height: 45)
     }
    
+    // MARK: Methods
+    
     @objc func signIn(_ sender: Any) {
         let vc = AuthViewController()
         vc.completionHandler = { [weak self] success in

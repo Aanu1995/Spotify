@@ -39,6 +39,8 @@ class PlaylistViewController: UIViewController, Dialog {
     
     private var audioTracks: [AudioTrack] = []
     
+    // MARK: Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -50,6 +52,8 @@ class PlaylistViewController: UIViewController, Dialog {
         collectionView.frame = view.bounds
         spinner.center = view.center
     }
+    
+    // MARK: Methods
     
     private func configureUI(){
         title = playlist.name

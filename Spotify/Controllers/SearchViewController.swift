@@ -20,6 +20,7 @@ class SearchViewController: UIViewController, Dialog {
     }()
     
     private let collectionView: UICollectionView = {
+        
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewCompositionalLayout(sectionProvider: { (_, _) -> NSCollectionLayoutSection? in
             
             let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
@@ -43,7 +44,10 @@ class SearchViewController: UIViewController, Dialog {
     }()
     
     private var categoryList: [Category] = []
-
+    
+    
+    // MARK: Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -55,10 +59,13 @@ class SearchViewController: UIViewController, Dialog {
         collectionView.frame = view.bounds
     }
     
+    // MARK: Methods
+    
     private func configureUI(){
         view.backgroundColor = .systemBackground
-        searchController.searchResultsUpdater = self
         navigationItem.searchController = searchController
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
         
         view.addSubview(collectionView)
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
@@ -87,18 +94,35 @@ class SearchViewController: UIViewController, Dialog {
             self.collectionView.reloadData()
         }
     }
+    
+    private func fetchSearchedData(query: String, viewController: SearchResultViewController) {
+        ApiService.shared.search(with: query) { (result) in
+            DispatchQueue.main.async {
+                switch result{
+                case .success(let results):
+                    return viewController.update(with: results)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        }
+    }
 }
 
 // MARK: Search
 
-extension SearchViewController: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
-        guard let query = searchController.searchBar.text, !query.trimmingCharacters(in: .whitespaces).isEmpty else { return }
-        
-        print(query)
-    }
-        
+extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate{
     
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let searchResultsViewController = searchController.searchResultsController as? SearchResultViewController, let query = searchBar.text, !query.trimmingCharacters(in: .whitespaces).isEmpty else { return }
+        
+        searchResultsViewController.delegate = self
+        fetchSearchedData(query: query, viewController: searchResultsViewController)
+    }
+    
+    func updateSearchResults(for searchController: UISearchController) {
+       //
+    }
 }
 
 // MARK: CollectionView
@@ -125,6 +149,34 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
         navigationController?.pushViewController(vc, animated: true)
         collectionView.deselectItem(at: indexPath, animated: true)
     }
+}
+
+// MARK: SearchResultViewControllerDelegate
+
+extension SearchViewController: SearchResultViewControllerDelegate {
+
+    func didTapResult(result: SearchResult, row: Int) {
+        switch result {
+        case .album(model: let models):
+            let album = models[row]
+            let vc = AlbumViewController(album: album)
+            vc.navigationItem.largeTitleDisplayMode = .never
+            navigationController?.pushViewController(vc, animated: true)
+        case .artist(let models):
+            let model = models[row]
+            //
+        case .playlist(let models):
+            let playlist = models[row]
+            let vc = PlaylistViewController(playlist: playlist)
+            vc.navigationItem.largeTitleDisplayMode = .never
+            navigationController?.pushViewController(vc, animated: true)
+        case .track(let models):
+            let model = models[row]
+            //
+        }
+    }
+    
+    
 }
 
 

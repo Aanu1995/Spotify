@@ -38,11 +38,21 @@ class AlbumViewController: UIViewController, Dialog {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         fetchData()
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        collectionView.frame = view.bounds
+        spinner.center = view.center
+    }
+    
+    // MARK: Methods
     
     private func configureUI(){
         title = album.name
@@ -60,13 +70,6 @@ class AlbumViewController: UIViewController, Dialog {
     private func fetchData(){
         spinner.startAnimating()
         ApiService.shared.getAlbumDetail(album: album, completion: onDetailAlbumFetched)
-    }
-    
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        collectionView.frame = view.bounds
-        spinner.center = view.center
     }
     
     private func onDetailAlbumFetched(result: Result<AlbumDetailResponse, Error>){

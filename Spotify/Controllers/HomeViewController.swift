@@ -7,23 +7,6 @@
 
 import UIKit
 
-enum BrowseSectionType {
-    case newReleases (viewModels: [NewReleaseCellViewModel])
-    case featurePlaylists (viewModels: [FeaturedPlaylistCellViewModel])
-    case recommendedTracks (viewModels: [TrackCellViewModel])
-    
-    var title: String {
-        switch self {
-        case .newReleases:
-            return "New Released Albums"
-        case .featurePlaylists:
-            return "Featured Playlists"
-        case .recommendedTracks:
-              return "Recommended"
-        }
-    }
-}
-
 class HomeViewController: UIViewController, Dialog {
     
     // MARK: Properties
@@ -46,11 +29,13 @@ class HomeViewController: UIViewController, Dialog {
     }()
     
     private var sections: [BrowseSectionType] = []
-    
     private var albums: [Album] = []
     private var playlists: [Playlist] = []
     private var audioTracks: [AudioTrack] = []
+    
        
+    // MARK: Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -63,6 +48,8 @@ class HomeViewController: UIViewController, Dialog {
         collectionView.frame = view.bounds
         spinner.center = view.center
     }
+    
+    // MARK: Methods
     
     private func configureUI() {
         view.backgroundColor = .systemBackground
@@ -370,7 +357,23 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         }
         collectionView.deselectItem(at: indexPath, animated: true)
     }
+
+}
+
+enum BrowseSectionType {
+    case newReleases (viewModels: [NewReleaseCellViewModel])
+    case featurePlaylists (viewModels: [FeaturedPlaylistCellViewModel])
+    case recommendedTracks (viewModels: [TrackCellViewModel])
     
-    
+    var title: String {
+        switch self {
+        case .newReleases:
+            return "New Released Albums"
+        case .featurePlaylists:
+            return "Featured Playlists"
+        case .recommendedTracks:
+              return "Recommended"
+        }
+    }
 }
 

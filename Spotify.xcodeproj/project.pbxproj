@@ -32,6 +32,8 @@
 		CE659D5B2618533800685FD5 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE659D5A2618533800685FD5 /* Category.swift */; };
 		CE659D6F2618684E00685FD5 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE659D6E2618684E00685FD5 /* CategoryViewController.swift */; };
 		CE6D3DAF261376DA00F12950 /* NewReleaseCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6D3DAE261376DA00F12950 /* NewReleaseCellViewModel.swift */; };
+		CE74231C2618DDD0009CFC5B /* SearchResultResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE74231B2618DDD0009CFC5B /* SearchResultResponse.swift */; };
+		CE74231F2618E15D009CFC5B /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE74231E2618E15D009CFC5B /* SearchResult.swift */; };
 		CE7A78E62616AB5800A68DFB /* TitleHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7A78E52616AB5800A68DFB /* TitleHeaderCollectionReusableView.swift */; };
 		CE918B1F2611680F00C427BC /* ImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE918B1E2611680F00C427BC /* ImageModel.swift */; };
 		CEBFD6F1260A433B00619DB1 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBFD6F0260A433B00619DB1 /* AuthViewController.swift */; };
@@ -91,6 +93,8 @@
 		CE659D5A2618533800685FD5 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		CE659D6E2618684E00685FD5 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		CE6D3DAE261376DA00F12950 /* NewReleaseCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewReleaseCellViewModel.swift; sourceTree = "<group>"; };
+		CE74231B2618DDD0009CFC5B /* SearchResultResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultResponse.swift; sourceTree = "<group>"; };
+		CE74231E2618E15D009CFC5B /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		CE7A78E52616AB5800A68DFB /* TitleHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
 		CE918B1E2611680F00C427BC /* ImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModel.swift; sourceTree = "<group>"; };
 		CEBFD6F0260A433B00619DB1 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
@@ -202,6 +206,8 @@
 				CECD3892261573E70083645A /* AlbumDetailResponse.swift */,
 				CECD389526157BCD0083645A /* PlaylistDetail.swift */,
 				CE659D5A2618533800685FD5 /* Category.swift */,
+				CE74231B2618DDD0009CFC5B /* SearchResultResponse.swift */,
+				CE74231E2618E15D009CFC5B /* SearchResult.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -430,6 +436,7 @@
 				CE4ABF9A2609310B00A1D9A3 /* SearchViewController.swift in Sources */,
 				CE659D5B2618533800685FD5 /* Category.swift in Sources */,
 				CE4ABF79260927D000A1D9A3 /* HomeViewController.swift in Sources */,
+				CE74231C2618DDD0009CFC5B /* SearchResultResponse.swift in Sources */,
 				CEBFD6F7260A437D00619DB1 /* SettingsViewController.swift in Sources */,
 				CECD389626157BCD0083645A /* PlaylistDetail.swift in Sources */,
 				CED9918E26160B3E0087595C /* HeaderViewViewModel.swift in Sources */,
@@ -467,6 +474,7 @@
 				CEDA9271260E0219000A9542 /* PrivateKeys.swift in Sources */,
 				CEE26326261761D200A25F11 /* CategoryCollectionViewCell.swift in Sources */,
 				CEDA926A260DE412000A9542 /* AuthResponse.swift in Sources */,
+				CE74231F2618E15D009CFC5B /* SearchResult.swift in Sources */,
 				CEBFD718260A456C00619DB1 /* User.swift in Sources */,
 				CE6D3DAF261376DA00F12950 /* NewReleaseCellViewModel.swift in Sources */,
 				CE59026D2614CC640076BE3F /* AlbumViewController.swift in Sources */,

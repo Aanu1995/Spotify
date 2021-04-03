@@ -18,6 +18,9 @@ class SettingsViewController: UIViewController {
     
     var sections: [Section] = []
 
+    
+    // MARK: Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureModels()
@@ -28,6 +31,8 @@ class SettingsViewController: UIViewController {
         super.viewDidLayoutSubviews()
         tableView.frame = view.bounds
     }
+    
+    // MARK: Methods
     
     private func configureUI() {
         title = "Settings"
