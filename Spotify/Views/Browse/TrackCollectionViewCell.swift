@@ -7,8 +7,8 @@
 
 import UIKit
 
-class RecommendedTrackCollectionViewCell: UICollectionViewCell {
-    static let identifier = "RecommendedTrackCollectionViewCell"
+class TrackCollectionViewCell: UICollectionViewCell {
+    static let identifier = "TrackCollectionViewCell"
     
     private let albumCoverImageView: UIImageView = {
         let imageView = UIImageView()
@@ -52,7 +52,7 @@ class RecommendedTrackCollectionViewCell: UICollectionViewCell {
         trackNameLabel.sizeToFit()
         artistNameLabel.sizeToFit()
         
-        trackNameLabel.frame = CGRect(x: albumCoverImageView.right + 10, y: 10, width: contentView.width - albumCoverImageView.width - 10, height: trackNameLabel.height)
+        trackNameLabel.frame = CGRect(x: albumCoverImageView.right + 10, y: 5, width: contentView.width - albumCoverImageView.width - 10, height: trackNameLabel.height)
         
         
         artistNameLabel.frame = CGRect(x: trackNameLabel.left, y: trackNameLabel.bottom + 16, width: trackNameLabel.width, height: artistNameLabel.height)
@@ -66,7 +66,7 @@ class RecommendedTrackCollectionViewCell: UICollectionViewCell {
         artistNameLabel.text = nil
     }
     
-    func configure(with viewModel: RecommendationCellViewModel){
+    func configure(with viewModel: TrackCellViewModel){
         trackNameLabel.text = viewModel.name
         albumCoverImageView.sd_setImage(with: viewModel.artworkURL, completed: nil)
         artistNameLabel.text = viewModel.artistName

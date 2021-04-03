@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RecommendationCellViewModel {
+struct TrackCellViewModel {
     let name: String
     let artistName: String
     let artworkURL: URL?

@@ -36,8 +36,8 @@ class WelcomeViewController: UIViewController, Dialog {
    
     @objc func signIn(_ sender: Any) {
         let vc = AuthViewController()
-        vc.completionHandler = { success in
-            DispatchQueue.main.async { [weak self] in
+        vc.completionHandler = { [weak self] success in
+            DispatchQueue.main.async {
                 self?.handleSignIn(success: success)
             }
         }
