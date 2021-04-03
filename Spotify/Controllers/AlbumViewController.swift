@@ -27,7 +27,6 @@ class AlbumViewController: UIViewController, Dialog {
         return spinner
     }()
     
-    private var audioTracks: [AudioTrack] = []
     private var audioTrackViewModels: [AlbumTrackCellViewModel] = []
     
     init(album: Album) {
@@ -75,9 +74,8 @@ class AlbumViewController: UIViewController, Dialog {
             self.spinner.stopAnimating()
             
             switch result{
-            case .success(let models):
-                self.audioTracks = models.tracks.items
-                self.audioTrackViewModels = models.tracks.items.compactMap({AlbumTrackCellViewModel(name: $0.name, artistName: $0.artists.first?.name ?? "")})
+            case .success(let model):
+                self.audioTrackViewModels = model.tracks.items.compactMap({AlbumTrackCellViewModel(name: $0.name, artistName: $0.artists.first?.name ?? "")})
                 break
             case .failure(let error):
                 self.present(self.showErrorDialog(message: error.localizedDescription), animated: true, completion: nil)
@@ -129,7 +127,7 @@ extension AlbumViewController: UICollectionViewDelegate, UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return audioTracks.count
+        return audioTrackViewModels.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

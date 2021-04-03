@@ -30,6 +30,8 @@ class ApiService {
         static let recommendationURL = baseAPIURL + "/recommendations?limit=50"
         static let albumDetailURL = baseAPIURL + "/albums/"
         static let playlistDetailURL = baseAPIURL + "/playlists/"
+        static let categoriesURL = baseAPIURL + "/browse/categories?limit=50"
+        static let categoryPlaylistsURL = baseAPIURL + "/browse/categories/"
     }
     
     // MARK: Album
@@ -170,6 +172,54 @@ class ApiService {
                 let decoder = JSONDecoder()
                 do {
                     let result = try decoder.decode(Recommendation.self, from: data)
+                    completion(.success(result))
+                } catch {
+                    return completion(.failure(error))
+                }
+            }
+            task.resume()
+        }
+    }
+    
+    // MARK: Categories
+    
+    public func getCategories(completion: @escaping (Result<CategoryResponse, Error>) -> Void){
+        createRequest(with: URL(string: Constants.categoriesURL), type: .GET) { (baseRequest) in
+            guard let baseRequest = baseRequest else {
+                return completion(.failure(ApiError.FailToGetData))
+            }
+            
+            let task = URLSession.shared.dataTask(with: baseRequest) { (data, _, error) in
+                guard let data = data else {
+                    return completion(.failure(error!))
+                }
+                
+                let decoder = JSONDecoder()
+                do {
+                    let result = try decoder.decode(CategoryResponse.self, from: data)
+                    completion(.success(result))
+                } catch {
+                    return completion(.failure(error))
+                }
+            }
+            task.resume()
+        }
+    }
+    
+    public func getCategoryPlaylists(category id: String, completion: @escaping (Result<FeaturedPlaylist, Error>) -> Void){
+        createRequest(with: URL(string: Constants.categoryPlaylistsURL + "\(id)/playlists"), type: .GET) { (baseRequest) in
+            guard let baseRequest = baseRequest else {
+                return completion(.failure(ApiError.FailToGetData))
+            }
+            
+            let task = URLSession.shared.dataTask(with: baseRequest) { (data, _, error) in
+                guard let data = data else {
+                    return completion(.failure(error!))
+                }
+                
+                let decoder = JSONDecoder()
+                do {
+                    let result = try decoder.decode(FeaturedPlaylist.self, from: data)
                     completion(.success(result))
                 } catch {
                     return completion(.failure(error))

@@ -7,6 +7,7 @@
 
 import Foundation
 
-struct GenreCellViewModel {
-    
+struct CategoryCellViewModel {
+    let name: String
+    let url: URL?
 }

@@ -7,8 +7,8 @@
 
 import UIKit
 
-class GenreCollectionViewCell: UICollectionViewCell {
-    static let identifier = "GenreCollectionViewCell"
+class CategoryCollectionViewCell: UICollectionViewCell {
+    static let identifier = "CategoryCollectionViewCell"
     
     private let colors: [UIColor] = [
         .systemPink,
@@ -59,10 +59,12 @@ class GenreCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         genreLabel.text = nil
+        imageView.image = UIImage(systemName: "music.quarternote.3", withConfiguration: UIImage.SymbolConfiguration(pointSize: 50.0, weight: .regular))
     }
     
-    public func configure(with title: String){
-        genreLabel.text = title
+    public func configure(with viewModel: CategoryCellViewModel){
+        genreLabel.text = viewModel.name
+        imageView.sd_setImage(with: viewModel.url, completed: nil)
         contentView.backgroundColor = colors.randomElement()
     }
 }

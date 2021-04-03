@@ -43,6 +43,8 @@ class AuthViewController: UIViewController, WKNavigationDelegate {
     
     public var completionHandler: ((Bool) -> Void)?
 
+    // MARK: Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Sign In"

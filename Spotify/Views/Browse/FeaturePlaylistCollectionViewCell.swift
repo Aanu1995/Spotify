@@ -45,7 +45,7 @@ class FeaturePlaylistCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let imageSize = contentView.height * 0.7
+        let imageSize = contentView.height * 0.72
         playlistCoverImageView.frame = CGRect(x: contentView.width * 0.15, y: 3, width: imageSize, height: imageSize * 0.9)
         playlistCoverImageView.layer.masksToBounds = true
         playlistCoverImageView.layer.cornerRadius = 4
@@ -53,10 +53,10 @@ class FeaturePlaylistCollectionViewCell: UICollectionViewCell {
         playlistNameLabel.sizeToFit()
         creatorNameLabel.sizeToFit()
         
-        playlistNameLabel.frame = CGRect(x: playlistCoverImageView.left - 25, y: playlistCoverImageView.bottom + 12 , width: playlistCoverImageView.width + 50, height: playlistNameLabel.height)
+        playlistNameLabel.frame = CGRect(x: playlistCoverImageView.left - 20, y: playlistCoverImageView.bottom + 10 , width: playlistCoverImageView.width + 40, height: playlistNameLabel.height)
         
         
-        creatorNameLabel.frame = CGRect(x: 3, y: playlistNameLabel.bottom + 8, width: contentView.width, height: creatorNameLabel.height)
+        creatorNameLabel.frame = CGRect(x: playlistCoverImageView.left, y: playlistNameLabel.bottom + 6, width: playlistCoverImageView.width, height: creatorNameLabel.height)
         playlistNameLabel.textAlignment = .center
         creatorNameLabel.textAlignment = .center
         

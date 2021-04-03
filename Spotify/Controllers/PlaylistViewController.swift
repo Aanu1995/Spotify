@@ -38,7 +38,6 @@ class PlaylistViewController: UIViewController, Dialog {
     }()
     
     private var audioTracks: [AudioTrack] = []
-    private var audioTrackViewModels: [TrackCellViewModel] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,9 +88,8 @@ class PlaylistViewController: UIViewController, Dialog {
             self.spinner.stopAnimating()
             
             switch result{
-            case .success(let models):
-                self.audioTracks = models.tracks.items.map({$0.track})
-                self.audioTrackViewModels = models.tracks.items.compactMap({TrackCellViewModel(name: $0.track.name, artistName: $0.track.artists.first?.name ?? "", artworkURL: URL(string: $0.track.album?.images.first?.url ?? ""))})
+            case .success(let model):
+                self.audioTracks = model.tracks.items.map({$0.track})
                 break
             case .failure(let error):
                 self.present(self.showErrorDialog(message: error.localizedDescription), animated: true, completion: nil)
@@ -149,7 +147,9 @@ extension PlaylistViewController: UICollectionViewDelegate, UICollectionViewData
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackCollectionViewCell.identifier, for: indexPath) as! TrackCollectionViewCell
         
-        let viewModel = audioTrackViewModels[indexPath.row]
+        let audioTrack = audioTracks[indexPath.row]
+        let viewModel = TrackCellViewModel(name: audioTrack.name, artistName: audioTrack.artists.first?.name ?? "", artworkURL: URL(string: audioTrack.album?.images.first?.url ?? ""))
+        
         cell.configure(with: viewModel)
         return cell
     }
