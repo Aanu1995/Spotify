@@ -351,9 +351,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             navigationController?.pushViewController(vc, animated: true)
         case .recommendedTracks:
             let audioTrack = audioTracks[indexPath.row]
-            let vc = AudioTrackViewController(audioTrack: audioTrack)
-            vc.navigationItem.largeTitleDisplayMode = .never
-            navigationController?.pushViewController(vc, animated: true)
+            //
         }
         collectionView.deselectItem(at: indexPath, animated: true)
     }

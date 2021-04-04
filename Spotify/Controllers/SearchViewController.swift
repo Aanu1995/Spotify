@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SafariServices
 
 class SearchViewController: UIViewController, Dialog {
     
@@ -64,7 +65,6 @@ class SearchViewController: UIViewController, Dialog {
     private func configureUI(){
         view.backgroundColor = .systemBackground
         navigationItem.searchController = searchController
-        searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
         
         view.addSubview(collectionView)
@@ -111,17 +111,13 @@ class SearchViewController: UIViewController, Dialog {
 
 // MARK: Search
 
-extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate{
+extension SearchViewController: UISearchBarDelegate{
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchResultsViewController = searchController.searchResultsController as? SearchResultViewController, let query = searchBar.text, !query.trimmingCharacters(in: .whitespaces).isEmpty else { return }
         
         searchResultsViewController.delegate = self
         fetchSearchedData(query: query, viewController: searchResultsViewController)
-    }
-    
-    func updateSearchResults(for searchController: UISearchController) {
-       //
     }
 }
 
@@ -157,21 +153,23 @@ extension SearchViewController: SearchResultViewControllerDelegate {
 
     func didTapResult(result: SearchResult, row: Int) {
         switch result {
-        case .album(model: let models):
-            let album = models[row]
+        case .album(model: let albums):
+            let album = albums[row]
             let vc = AlbumViewController(album: album)
             vc.navigationItem.largeTitleDisplayMode = .never
             navigationController?.pushViewController(vc, animated: true)
-        case .artist(let models):
-            let model = models[row]
-            //
-        case .playlist(let models):
-            let playlist = models[row]
+        case .artist(let artists):
+            let artist = artists[row]
+            guard let url = URL(string: artist.externalURLs["spotify"] ?? "") else { return }
+            let vc = SFSafariViewController(url: url)
+            present(vc, animated: true, completion: nil)
+        case .playlist(let playlists):
+            let playlist = playlists[row]
             let vc = PlaylistViewController(playlist: playlist)
             vc.navigationItem.largeTitleDisplayMode = .never
             navigationController?.pushViewController(vc, animated: true)
-        case .track(let models):
-            let model = models[row]
+        case .track(let audioTracks):
+            let audioTrack = audioTracks[row]
             //
         }
     }
