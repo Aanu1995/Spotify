@@ -27,7 +27,8 @@ class AlbumViewController: UIViewController, Dialog {
         return spinner
     }()
     
-    private var audioTrackViewModels: [AlbumTrackCellViewModel] = []
+    private var audioTracks: [AudioTrack] = []
+  
     
     init(album: Album) {
         self.album = album
@@ -78,7 +79,7 @@ class AlbumViewController: UIViewController, Dialog {
             
             switch result{
             case .success(let model):
-                self.audioTrackViewModels = model.tracks.items.compactMap({AlbumTrackCellViewModel(name: $0.name, artistName: $0.artists.first?.name ?? "")})
+                self.audioTracks = model.tracks.items
                 break
             case .failure(let error):
                 self.present(self.showErrorDialog(message: error.localizedDescription), animated: true, completion: nil)
@@ -130,25 +131,27 @@ extension AlbumViewController: UICollectionViewDelegate, UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return audioTrackViewModels.count
+        return audioTracks.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AlbumTrackCollectionViewCell.identifier, for: indexPath) as! AlbumTrackCollectionViewCell
         
-        let viewModel = audioTrackViewModels[indexPath.row]
+        let track = audioTracks[indexPath.row]
+        let viewModel = AlbumTrackCellViewModel(name: track.name, artistName: track.artists.first?.name ?? "")
         cell.configure(with: viewModel)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath.row)
+        let track = audioTracks[indexPath.row]
         collectionView.deselectItem(at: indexPath, animated: true)
+        PlayerPresenter.shared.startPlayback(from: self, track: track)
     }
 }
 
 extension AlbumViewController: HeaderCollectionReusableViewDelegate {
     func PlaylistHeaderCollectionReusableViewDidTapPlayAll(_ header: HeaderCollectionReusableView) {
-        //
+        PlayerPresenter.shared.startPlayback(from: self, tracks: audioTracks)
     }
 }

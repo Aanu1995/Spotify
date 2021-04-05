@@ -17,6 +17,8 @@ struct AudioTrack : Codable {
     let durationInMilliseconds: Int
     let explicit: Bool
     let externalURLs: [String: String]
+    let previewURL: String?
+    let href: String?
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -28,5 +30,7 @@ struct AudioTrack : Codable {
         case durationInMilliseconds = "duration_ms"
         case explicit
         case externalURLs = "external_urls"
+        case previewURL = "preview_url"
+        case href
     }
 }

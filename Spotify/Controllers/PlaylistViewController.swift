@@ -159,8 +159,9 @@ extension PlaylistViewController: UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath.row)
         collectionView.deselectItem(at: indexPath, animated: true)
+        let track = audioTracks[indexPath.row]
+        PlayerPresenter.shared.startPlayback(from: self, track: track)
     }
 }
 
@@ -168,6 +169,6 @@ extension PlaylistViewController: UICollectionViewDelegate, UICollectionViewData
 extension PlaylistViewController: HeaderCollectionReusableViewDelegate {
     
     func PlaylistHeaderCollectionReusableViewDidTapPlayAll(_ header: HeaderCollectionReusableView) {
-       // start playlist in queue
+        PlayerPresenter.shared.startPlayback(from: self, tracks: audioTracks)
     }
 }

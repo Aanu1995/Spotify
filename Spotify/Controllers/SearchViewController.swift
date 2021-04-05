@@ -170,7 +170,7 @@ extension SearchViewController: SearchResultViewControllerDelegate {
             navigationController?.pushViewController(vc, animated: true)
         case .track(let audioTracks):
             let audioTrack = audioTracks[row]
-            //
+            PlayerPresenter.shared.startPlayback(from: self, track: audioTrack)
         }
     }
     

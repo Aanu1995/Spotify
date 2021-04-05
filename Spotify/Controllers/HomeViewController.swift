@@ -351,7 +351,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             navigationController?.pushViewController(vc, animated: true)
         case .recommendedTracks:
             let audioTrack = audioTracks[indexPath.row]
-            //
+            PlayerPresenter.shared.startPlayback(from: self, track: audioTrack)
         }
         collectionView.deselectItem(at: indexPath, animated: true)
     }

@@ -44,7 +44,7 @@ class SearchResultSubtitleTableViewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         let imageSize = contentView.height - 10
-        iconImageView.frame = CGRect(x: 10, y: 5, width: imageSize, height: imageSize)
+        iconImageView.frame = CGRect(x: 10, y: 5, width: imageSize, height: imageSize-10)
         let labelHeight = contentView.height * 0.5
         label.frame = CGRect(x: iconImageView.right + 10, y: 0, width: contentView.width - iconImageView.width - 20, height: labelHeight)
         subTitleLabel.frame = CGRect(x: iconImageView.right + 10, y: labelHeight, width: contentView.width - iconImageView.width - 20, height: contentView.height - labelHeight)
