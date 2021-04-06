@@ -26,7 +26,12 @@ final class PlayerControlsView: UIView {
     
     private let volumeSlider: UISlider = {
         let slider = UISlider()
-        slider.value = 0.5
+        let volume = UserDefaults.standard.float(forKey: "volume")
+        if  volume > 0.0 {
+            slider.value = volume
+        }else {
+            slider.value = 0.5
+        }
         slider.thumbTintColor = .black
         return slider
     }()

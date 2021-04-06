@@ -70,7 +70,12 @@ class PlayerViewController: UIViewController {
         
         view.addSubview(imageView)
         view.addSubview(controlsView)
+        print("tapped")
         controlsView.delegate = self
+    }
+    
+   public func refreshUI(){
+        configureUI()
     }
     
     @objc private func didTapClose(){
