@@ -43,7 +43,6 @@ class LibraryTabView: UIView {
     }()
     
     let tabIndicatorheight: CGFloat = 3
-    var currentIndicatorState: IndicatorState = .Playlist
     
     // MARK: Lifecycle
     
@@ -75,42 +74,21 @@ class LibraryTabView: UIView {
 
     
     @objc private func didTapPlaylist(){
-        UIView.animate(withDuration: 0.2) { [weak self] in
-            self?.updateLayout(state: .Playlist)
-            self?.delegate?.LibraryTabViewDidTapItem(at: .Playlist)
-        }
+       delegate?.LibraryTabViewDidTapItem(at: .Playlist)
     }
     
     @objc private func didTapAlbum(){
+        delegate?.LibraryTabViewDidTapItem(at: .Album)
+    }
+    
+    private func update(offset: CGFloat){
+        let width: CGFloat = offset > 75 ? albumButton.width : playlistButton.width
+        tabIndicator.frame = CGRect(x: offset, y: playlistButton.bottom + 3, width: width, height: tabIndicatorheight)
+    }
+    
+    public func updateLayoutOnScroll(offset: CGFloat){
         UIView.animate(withDuration: 0.2) { [weak self] in
-            self?.updateLayout(state: .Album)
-            self?.delegate?.LibraryTabViewDidTapItem(at: .Album)
-        }
-    }
-    
-    private func updateLayout(state: IndicatorState){
-        switch state {
-        case .Playlist:
-            tabIndicator.frame = CGRect(x: playlistButton.left, y: playlistButton.bottom + 3, width: playlistButton.width, height: tabIndicatorheight)
-        case .Album:
-            tabIndicator.frame = CGRect(x: albumButton.left, y: playlistButton.bottom + 3, width: albumButton.width, height: tabIndicatorheight)
-        }
-        currentIndicatorState = state
-    }
-    
-    private func updateLayoutDidScroll(){
-        if currentIndicatorState == .Playlist {
-            tabIndicator.frame = CGRect(x: albumButton.left, y: playlistButton.bottom + 3, width: albumButton.width, height: tabIndicatorheight)
-            currentIndicatorState = .Album
-        } else {
-            tabIndicator.frame = CGRect(x: playlistButton.left, y: playlistButton.bottom + 3, width: playlistButton.width, height: tabIndicatorheight)
-            currentIndicatorState = .Playlist
-        }
-    }
-    
-    public func updateLayoutOnScroll(){
-        UIView.animate(withDuration: 0.2) { [weak self] in
-            self?.updateLayoutDidScroll()
+            self?.update(offset: offset)
         }
     }
 }

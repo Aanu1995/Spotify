@@ -69,13 +69,10 @@ class LibraryViewController: UIViewController {
 // MARK: ScrollView
 
 extension LibraryViewController: UIScrollViewDelegate {
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print(scrollView.contentOffset.x)
-        if scrollView.contentOffset.x >= scrollView.width - 100 {
-            tabView.updateLayoutOnScroll()
-        } else if scrollView.contentOffset.x <= 100{
-            tabView.updateLayoutOnScroll()
-        }
+        let currentOffset: CGFloat = ((scrollView.contentOffset.x * 200) / view.width) / 2
+        tabView.updateLayoutOnScroll(offset: currentOffset)
     }
 }
 
@@ -87,7 +84,7 @@ extension LibraryViewController: LibraryTabViewDelegate {
         case .Playlist:
             scrollView.setContentOffset(.zero, animated: true)
         case .Album:
-            scrollView.setContentOffset(CGPoint(x: scrollView.width, y: 0), animated: true)
+            scrollView.setContentOffset(CGPoint(x: view.width, y: 0), animated: true)
         }
     }
 }
