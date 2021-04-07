@@ -17,7 +17,8 @@ class SearchResultDefaultTableViewCell: UITableViewCell {
     
     private let iconImageView: UIImageView = {
         let image = UIImageView()
-        image.contentMode = .scaleAspectFill
+        image.contentMode = .scaleAspectFit
+        image.tintColor = .label
         return image
     }()
 
@@ -51,7 +52,7 @@ class SearchResultDefaultTableViewCell: UITableViewCell {
     
     public func configure(with viewModel: SearchResultDefaultTableViewCellViewModel){
         label.text = viewModel.title
-        iconImageView.sd_setImage(with: viewModel.imageURL, completed: nil)
+        iconImageView.sd_setImage(with: viewModel.imageURL, placeholderImage: UIImage(systemName: "music.note.list", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .regular)), completed: nil)
     }
 
 }

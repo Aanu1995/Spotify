@@ -9,7 +9,7 @@ import UIKit
 import SDWebImage
 
 protocol HeaderCollectionReusableViewDelegate: AnyObject {
-    func PlaylistHeaderCollectionReusableViewDidTapPlayAll(_ header: HeaderCollectionReusableView)
+    func playlistHeaderCollectionReusableViewDidTapPlayAll(_ header: HeaderCollectionReusableView)
 }
 
 final class HeaderCollectionReusableView: UICollectionReusableView {
@@ -87,13 +87,13 @@ final class HeaderCollectionReusableView: UICollectionReusableView {
     }
     
     @objc func didTapPlayAll(){
-        delegate?.PlaylistHeaderCollectionReusableViewDidTapPlayAll(self)
+        delegate?.playlistHeaderCollectionReusableViewDidTapPlayAll(self)
     }
     
     func configure (viewModel: HeaderViewViewModel){
         nameLabel.text = viewModel.name
         descriptionLabel.text = viewModel.description
         ownerNameLabel.text = viewModel.ownerName
-        imageView.sd_setImage(with: viewModel.artworkURL, completed: nil)
+        imageView.sd_setImage(with: viewModel.artworkURL, placeholderImage: UIImage(systemName: "music.note.list", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .regular)), completed: nil)
     }
 }

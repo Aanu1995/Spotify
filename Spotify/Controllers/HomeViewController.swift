@@ -41,6 +41,7 @@ class HomeViewController: UIViewController, Dialog {
         configureUI()
         configureCollectionView()
         fetchData()
+        addGestureRecognizer()
     }
     
     override func viewDidLayoutSubviews() {
@@ -54,6 +55,26 @@ class HomeViewController: UIViewController, Dialog {
     private func configureUI() {
         view.backgroundColor = .systemBackground
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .done, target: self, action: #selector(didTapSettings))
+    }
+    
+    private func addGestureRecognizer(){
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress(_:)))
+        collectionView.addGestureRecognizer(gesture)
+    }
+    
+    @objc func didLongPress(_ gesture: UILongPressGestureRecognizer){
+        guard gesture.state == .began else { return }
+        
+        let torchPoint = gesture.location(in: collectionView)
+        guard let indexPath = collectionView.indexPathForItem(at: torchPoint), indexPath.section == 2 else {
+            return
+        }
+        
+        let track = audioTracks[indexPath.row]
+        let actionSheet = UIAlertController(title: track.name, message: "Would you like to add this to a playlist?", preferredStyle: .actionSheet)
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        actionSheet.addAction(UIAlertAction(title: "Add to Playlist", style: .default, handler: nil))
+        present(actionSheet, animated: true, completion: nil)
     }
     
     private func configureCollectionView(){
@@ -112,7 +133,6 @@ class HomeViewController: UIViewController, Dialog {
                 featurePlaylist = model
             case .failure(let error):
                 currentError = error
-                print(error.localizedDescription)
             }
         }
         
@@ -138,7 +158,6 @@ class HomeViewController: UIViewController, Dialog {
                         recommendation = model
                     case .failure(let error):
                         currentError = error
-                        print(error.localizedDescription)
                     }
                 }
             case .failure(let error):
@@ -146,7 +165,6 @@ class HomeViewController: UIViewController, Dialog {
                     group.leave()
                 }
                 currentError = error
-                print(error.localizedDescription)
             }
         }
         

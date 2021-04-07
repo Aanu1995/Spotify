@@ -85,12 +85,12 @@ final class PlayerPresenter{
 
 extension PlayerPresenter : PlayerViewControllerDelegate, PlayerViewControllerDatasource {
     
-    func PlayerViewControllerDelegateDidAdjustVolume(to value: Float) {
+    func playerViewControllerDelegateDidAdjustVolume(to value: Float) {
         player?.volume = value
         UserDefaults.standard.set(value, forKey: "volume")
     }
     
-    func PlayerViewControllerDelegateDidTapForward() {
+    func playerViewControllerDelegateDidTapForward() {
         if player!.items().count > 1{
             player?.pause()
             player?.advanceToNextItem()
@@ -101,7 +101,7 @@ extension PlayerPresenter : PlayerViewControllerDelegate, PlayerViewControllerDa
         }
     }
     
-    func PlayerViewControllerDelegateDidTapBackward() {
+    func playerViewControllerDelegateDidTapBackward() {
         guard !previousTracks.isEmpty else {
             return
         }
@@ -113,7 +113,7 @@ extension PlayerPresenter : PlayerViewControllerDelegate, PlayerViewControllerDa
         player?.play()
     }
     
-    func PlayerViewControllerDelegateDidTapPlayPause() {
+    func playerViewControllerDelegateDidTapPlayPause() {
         if let player = player {
             if player.timeControlStatus == .playing {
                 player.pause()

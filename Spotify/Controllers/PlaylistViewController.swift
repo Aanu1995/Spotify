@@ -168,7 +168,7 @@ extension PlaylistViewController: UICollectionViewDelegate, UICollectionViewData
 //
 extension PlaylistViewController: HeaderCollectionReusableViewDelegate {
     
-    func PlaylistHeaderCollectionReusableViewDidTapPlayAll(_ header: HeaderCollectionReusableView) {
+    func playlistHeaderCollectionReusableViewDidTapPlayAll(_ header: HeaderCollectionReusableView) {
         PlayerPresenter.shared.startPlayback(from: self, tracks: audioTracks)
     }
 }

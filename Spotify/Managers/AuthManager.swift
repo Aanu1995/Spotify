@@ -29,7 +29,11 @@ final class AuthManager {
     }
     
     var isSignedIn: Bool {
-        return accessToken != nil
+        return (accessToken != nil && userId != nil)
+    }
+    
+    var userId: String? {
+        return UserDefaults.standard.string(forKey: "userId")
     }
     
     private var accessToken: String? {
@@ -76,10 +80,20 @@ final class AuthManager {
             }
             
             let decoder = JSONDecoder()
+            
             do {
                 let result = try decoder.decode(AuthResponse.self, from: data)
                 self?.cacheToken(response: result)
-                completionHandler(true)
+                // get userProfile and save the id to storage
+                if let _ = result.refreshToken {
+                    self?.getUserProfile(result: result, completionHandler: { status in
+                        completionHandler(status)
+                    })
+                } else {
+                    self?.cacheToken(response: result)
+                    completionHandler(true)
+                }
+                
             } catch {
                 completionHandler(false)
             }
@@ -97,6 +111,17 @@ final class AuthManager {
         getToken(components: components) { (success) in
             DispatchQueue.main.async {
                 completionHandler(success)
+            }
+        }
+    }
+    
+    private func getUserProfile (result: AuthResponse, completionHandler: @escaping (Bool) -> Void){
+        ApiService.shared.getCurrentUserProfile { profileResult in
+            switch profileResult {
+            case .success:
+                completionHandler(true)
+            case .failure:
+                completionHandler(false)
             }
         }
     }
@@ -123,11 +148,13 @@ final class AuthManager {
         }
         
         var components = URLComponents()
+        
         components.queryItems = [
             URLQueryItem(name: "grant_type", value: "refresh_token"),
             URLQueryItem(name: "refresh_token", value: refreshToken),
             URLQueryItem(name: "client_id", value: Constants.clientId)
         ]
+        
         getToken(components: components) { (success) in
             DispatchQueue.main.async {
                 completionHandler?(success)
@@ -141,5 +168,9 @@ final class AuthManager {
             UserDefaults.standard.setValue(refreshToken, forKey: "refresh_token")
         }
         UserDefaults.standard.setValue(Date().addingTimeInterval(TimeInterval(response.expiresIn)), forKey: "expiration_date")
+    }
+    
+    public func saveUserId(userId: String){
+        UserDefaults.standard.setValue(userId, forKey: "userId")
     }
 }

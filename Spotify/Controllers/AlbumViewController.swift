@@ -151,7 +151,7 @@ extension AlbumViewController: UICollectionViewDelegate, UICollectionViewDataSou
 }
 
 extension AlbumViewController: HeaderCollectionReusableViewDelegate {
-    func PlaylistHeaderCollectionReusableViewDidTapPlayAll(_ header: HeaderCollectionReusableView) {
+    func playlistHeaderCollectionReusableViewDidTapPlayAll(_ header: HeaderCollectionReusableView) {
         PlayerPresenter.shared.startPlayback(from: self, tracks: audioTracks, isTracksFromAlbum: true, albumImageURL: URL(string: album.images.first?.url ?? ""))
     }
 }

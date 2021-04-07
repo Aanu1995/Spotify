@@ -14,10 +14,10 @@ protocol PlayerViewControllerDatasource: AnyObject {
 }
 
 protocol PlayerViewControllerDelegate: AnyObject {
-    func PlayerViewControllerDelegateDidTapPlayPause()
-    func PlayerViewControllerDelegateDidAdjustVolume(to value: Float)
-    func PlayerViewControllerDelegateDidTapForward()
-    func PlayerViewControllerDelegateDidTapBackward()
+    func playerViewControllerDelegateDidTapPlayPause()
+    func playerViewControllerDelegateDidAdjustVolume(to value: Float)
+    func playerViewControllerDelegateDidTapForward()
+    func playerViewControllerDelegateDidTapBackward()
 }
 
 class PlayerViewController: UIViewController {
@@ -70,7 +70,6 @@ class PlayerViewController: UIViewController {
         
         view.addSubview(imageView)
         view.addSubview(controlsView)
-        print("tapped")
         controlsView.delegate = self
     }
     
@@ -91,19 +90,19 @@ class PlayerViewController: UIViewController {
 
 extension PlayerViewController: PlayerControlsViewDelegate {
     
-    func PlayerControlsViewDidUpdateSliderVolume(_ controlView: PlayerControlsView, didSelectSlider value: Float) {
-        delegate?.PlayerViewControllerDelegateDidAdjustVolume(to: value)
+    func playerControlsViewDidUpdateSliderVolume(_ controlView: PlayerControlsView, didSelectSlider value: Float) {
+        delegate?.playerViewControllerDelegateDidAdjustVolume(to: value)
     }
     
-    func PlayerControlsViewDidTapPlayPauseButton(_ controlView: PlayerControlsView) {
-        delegate?.PlayerViewControllerDelegateDidTapPlayPause()
+    func playerControlsViewDidTapPlayPauseButton(_ controlView: PlayerControlsView) {
+        delegate?.playerViewControllerDelegateDidTapPlayPause()
     }
     
-    func PlayerControlsViewDidTapBackwardButton(_ controlView: PlayerControlsView) {
-        delegate?.PlayerViewControllerDelegateDidTapBackward()
+    func playerControlsViewDidTapBackwardButton(_ controlView: PlayerControlsView) {
+        delegate?.playerViewControllerDelegateDidTapBackward()
     }
     
-    func PlayerControlsViewDidTapNextutton(_ controlView: PlayerControlsView) {
-        delegate?.PlayerViewControllerDelegateDidTapForward()
+    func playerControlsViewDidTapNextutton(_ controlView: PlayerControlsView) {
+        delegate?.playerViewControllerDelegateDidTapForward()
     }
 }

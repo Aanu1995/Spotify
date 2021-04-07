@@ -24,7 +24,8 @@ class SearchResultSubtitleTableViewCell: UITableViewCell {
     
     private let iconImageView: UIImageView = {
         let image = UIImageView()
-        image.contentMode = .scaleAspectFill
+        image.contentMode = .scaleAspectFit
+        image.tintColor = .label
         return image
     }()
 
@@ -44,11 +45,10 @@ class SearchResultSubtitleTableViewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         let imageSize = contentView.height - 10
-        iconImageView.frame = CGRect(x: 10, y: 5, width: imageSize, height: imageSize-10)
+        iconImageView.frame = CGRect(x: 10, y: 5, width: imageSize, height: imageSize)
         let labelHeight = contentView.height * 0.5
         label.frame = CGRect(x: iconImageView.right + 10, y: 0, width: contentView.width - iconImageView.width - 20, height: labelHeight)
         subTitleLabel.frame = CGRect(x: iconImageView.right + 10, y: labelHeight, width: contentView.width - iconImageView.width - 20, height: contentView.height - labelHeight)
-       
     }
     
     override func prepareForReuse() {
@@ -60,8 +60,7 @@ class SearchResultSubtitleTableViewCell: UITableViewCell {
     
     public func configure(with viewModel: SearchResultSubtitleTableViewCellViewModel){
         label.text = viewModel.title
-        iconImageView.sd_setImage(with: viewModel.imageURL, completed: nil)
+        iconImageView.sd_setImage(with: viewModel.imageURL,placeholderImage: UIImage(systemName: "music.note.list", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .regular)), completed: nil)
         subTitleLabel.text = viewModel.subtitle
     }
-
 }

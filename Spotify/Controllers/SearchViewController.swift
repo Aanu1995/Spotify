@@ -101,8 +101,8 @@ class SearchViewController: UIViewController, Dialog {
                 switch result{
                 case .success(let results):
                     return viewController.update(with: results)
-                case .failure(let error):
-                    print(error.localizedDescription)
+                case .failure:
+                    break
                 }
             }
         }

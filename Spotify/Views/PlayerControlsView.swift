@@ -8,10 +8,10 @@
 import UIKit
 
 protocol PlayerControlsViewDelegate: AnyObject {
-    func PlayerControlsViewDidTapPlayPauseButton(_ controlView: PlayerControlsView)
-    func PlayerControlsViewDidTapBackwardButton(_ controlView: PlayerControlsView)
-    func PlayerControlsViewDidTapNextutton(_ controlView: PlayerControlsView)
-    func PlayerControlsViewDidUpdateSliderVolume(_ controlView: PlayerControlsView, didSelectSlider value: Float)
+    func playerControlsViewDidTapPlayPauseButton(_ controlView: PlayerControlsView)
+    func playerControlsViewDidTapBackwardButton(_ controlView: PlayerControlsView)
+    func playerControlsViewDidTapNextutton(_ controlView: PlayerControlsView)
+    func playerControlsViewDidUpdateSliderVolume(_ controlView: PlayerControlsView, didSelectSlider value: Float)
 }
 
 struct PlayViewControlsViewViewModel {
@@ -114,7 +114,7 @@ final class PlayerControlsView: UIView {
     
     @objc private func didTapPlayPauseButton(){
         self.isPlaying = !self.isPlaying
-        delegate?.PlayerControlsViewDidTapPlayPauseButton(self)
+        delegate?.playerControlsViewDidTapPlayPauseButton(self)
         
         let pause = UIImage(systemName: "pause", withConfiguration: UIImage.SymbolConfiguration(pointSize: 34, weight: .regular))
         let play = UIImage(systemName: "play.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 34, weight: .regular))
@@ -123,15 +123,15 @@ final class PlayerControlsView: UIView {
     }
     
     @objc private func didTapBackButton(){
-        delegate?.PlayerControlsViewDidTapBackwardButton(self)
+        delegate?.playerControlsViewDidTapBackwardButton(self)
     }
     
     @objc private func didTapNextButton(){
-        delegate?.PlayerControlsViewDidTapNextutton(self)
+        delegate?.playerControlsViewDidTapNextutton(self)
     }
     
     @objc private func didUpdateSlider(_ slider: UISlider){
-        delegate?.PlayerControlsViewDidUpdateSliderVolume(self, didSelectSlider: slider.value)
+        delegate?.playerControlsViewDidUpdateSliderVolume(self, didSelectSlider: slider.value)
     }
     
     

@@ -11,7 +11,7 @@ enum IndicatorState {
 }
 
 protocol LibraryTabViewDelegate: AnyObject {
-    func LibraryTabViewDidTapItem(at state: IndicatorState);
+    func libraryTabViewDidTapItem(at state: IndicatorState);
 }
 
 import UIKit
@@ -43,6 +43,7 @@ class LibraryTabView: UIView {
     }()
     
     let tabIndicatorheight: CGFloat = 3
+    public var currentTabState: IndicatorState = .Playlist
     
     // MARK: Lifecycle
     
@@ -74,15 +75,26 @@ class LibraryTabView: UIView {
 
     
     @objc private func didTapPlaylist(){
-       delegate?.LibraryTabViewDidTapItem(at: .Playlist)
+        currentTabState = .Playlist
+       delegate?.libraryTabViewDidTapItem(at: .Playlist)
     }
     
     @objc private func didTapAlbum(){
-        delegate?.LibraryTabViewDidTapItem(at: .Album)
+        currentTabState = .Album
+        delegate?.libraryTabViewDidTapItem(at: .Album)
     }
     
     private func update(offset: CGFloat){
-        let width: CGFloat = offset > 75 ? albumButton.width : playlistButton.width
+        var width: CGFloat!
+        
+        if offset > 75 {
+            currentTabState = .Album
+            width =  albumButton.width
+        }else{
+            currentTabState = .Playlist
+            width =  playlistButton.width
+        }
+        
         tabIndicator.frame = CGRect(x: offset, y: playlistButton.bottom + 3, width: width, height: tabIndicatorheight)
     }
     

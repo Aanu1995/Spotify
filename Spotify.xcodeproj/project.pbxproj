@@ -69,6 +69,7 @@
 		CEF1418D261CD94B002A7A28 /* LibraryPlaylistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF1418C261CD94B002A7A28 /* LibraryPlaylistViewController.swift */; };
 		CEF14190261CD9B8002A7A28 /* LibraryAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF1418F261CD9B8002A7A28 /* LibraryAlbumViewController.swift */; };
 		CEF14193261CE5AF002A7A28 /* LibraryTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF14192261CE5AF002A7A28 /* LibraryTabView.swift */; };
+		CEF14197261D9F94002A7A28 /* ActionLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF14196261D9F94002A7A28 /* ActionLabelView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -137,6 +138,7 @@
 		CEF1418C261CD94B002A7A28 /* LibraryPlaylistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPlaylistViewController.swift; sourceTree = "<group>"; };
 		CEF1418F261CD9B8002A7A28 /* LibraryAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryAlbumViewController.swift; sourceTree = "<group>"; };
 		CEF14192261CE5AF002A7A28 /* LibraryTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTabView.swift; sourceTree = "<group>"; };
+		CEF14196261D9F94002A7A28 /* ActionLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionLabelView.swift; sourceTree = "<group>"; };
 		EF3D0078AA125424B127783E /* Pods_Spotify.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Spotify.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -356,6 +358,7 @@
 				CEF1418C261CD94B002A7A28 /* LibraryPlaylistViewController.swift */,
 				CEF1418F261CD9B8002A7A28 /* LibraryAlbumViewController.swift */,
 				CEF14192261CE5AF002A7A28 /* LibraryTabView.swift */,
+				CEF14196261D9F94002A7A28 /* ActionLabelView.swift */,
 			);
 			name = Library;
 			sourceTree = "<group>";
@@ -483,6 +486,7 @@
 				CE659D5B2618533800685FD5 /* Category.swift in Sources */,
 				CE4ABF79260927D000A1D9A3 /* HomeViewController.swift in Sources */,
 				CEF14193261CE5AF002A7A28 /* LibraryTabView.swift in Sources */,
+				CEF14197261D9F94002A7A28 /* ActionLabelView.swift in Sources */,
 				CEED4177261A7A7A0049BBE4 /* PlaybackPresenter.swift in Sources */,
 				CE74231C2618DDD0009CFC5B /* SearchResultResponse.swift in Sources */,
 				CEBFD6F7260A437D00619DB1 /* SettingsViewController.swift in Sources */,

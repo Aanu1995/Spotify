@@ -27,19 +27,23 @@ class ApiService {
     
    private enum Endpoints {
         case currentProfileURL
+        case currentUserPlaylistURL
         case newReleasesURL
         case featuredPlaylistsURL
         case recommendedGenreURL
         case recommendationURL(seeds: String)
         case albumDetailURL (id: String)
         case playlistDetailURL (id: String)
+        case createPlaylist(id: String)
         case categoriesURL
         case categoryPlaylistsURL(id: String)
         case searchURL(query: String)
+        case addTrackToPlaylistURL(id: String)
         
         var stringValue: String {
             switch self {
                 case .currentProfileURL: return baseAPIURL + "/me"
+                case .currentUserPlaylistURL: return  baseAPIURL + "/me/playlists"
                 case .newReleasesURL: return baseAPIURL + "/browse/new-releases?limit=50"
                 case .featuredPlaylistsURL: return baseAPIURL + "/browse/featured-playlists?limit=50"
                 case .recommendedGenreURL: return baseAPIURL + "/recommendations/available-genre-seeds"
@@ -48,7 +52,9 @@ class ApiService {
                 case .playlistDetailURL(let id): return baseAPIURL + "/playlists/\(id)"
                 case .categoriesURL: return baseAPIURL + "/browse/categories?limit=50"
                 case .categoryPlaylistsURL(let id): return baseAPIURL + "/browse/categories/\(id)/playlists"
-                case.searchURL(let query): return baseAPIURL + "/search?limit=50&q=\(query)&type=album,track,artist,playlist"
+                case .searchURL(let query): return baseAPIURL + "/search?limit=50&q=\(query)&type=album,track,artist,playlist"
+                case .createPlaylist(let id): return   baseAPIURL + "/users/\(id)/playlists"
+                case .addTrackToPlaylistURL(let playlistId): return  baseAPIURL + "playlists/\(playlistId)/tracks"
             }
         }
        
@@ -106,6 +112,115 @@ class ApiService {
     }
     
     // MARK: Playlist
+    
+    public func getCurrentUserPlaylists(completion: @escaping (Result<PlaylistResponse, Error>) -> Void){
+        createRequest(with: Endpoints.currentUserPlaylistURL.url, type: .GET) { (baseRequest) in
+            guard let baseRequest = baseRequest else {
+                return completion(.failure(ApiError.FailToGetData))
+            }
+            
+            let task = URLSession.shared.dataTask(with: baseRequest) { (data, _, error) in
+                guard let data = data else {
+                    return completion(.failure(error!))
+                }
+                
+                let decoder = JSONDecoder()
+                do {
+                    let result = try decoder.decode(PlaylistResponse.self, from: data)
+                    completion(.success(result))
+                } catch {
+                    return completion(.failure(error))
+                }
+            }
+            task.resume()
+        }
+    }
+    
+    public func createPlaylists(with name: String, completion: @escaping (Bool) -> Void){
+        let id: String = AuthManager.shared.userId!
+        createRequest(with: Endpoints.createPlaylist(id: id).url, type: .POST) { (baseRequest) in
+            guard let baseRequest = baseRequest else {
+                return completion(false)
+            }
+            
+            var request = baseRequest
+           
+            request.httpBody = try? JSONSerialization.data(withJSONObject: ["name": name], options: .fragmentsAllowed)
+          
+            let task = URLSession.shared.dataTask(with: request) { (data, _, error) in
+                guard let data = data else {
+                    return completion(false)
+                }
+                
+                do {
+                    let result = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                    if let result = result as? [String: Any], result["id"] as? String != nil {
+                        completion(true)
+                    }else {
+                        completion(false)
+                    }
+                }catch{
+                    completion(false)
+                }
+            }
+            task.resume()
+        }
+    }
+    
+    public func addTrackToPlaylist(playlistId: String, track: AudioTrack, completion: @escaping (Bool) -> Void){
+        createRequest(with: Endpoints.addTrackToPlaylistURL(id: playlistId).url, type: .GET) { (baseRequest) in
+            guard let baseRequest = baseRequest else {
+                return completion(false)
+            }
+            
+            var request = baseRequest
+           
+            let json = ["uris":"spotify:track:\(track.id)"]
+            request.httpBody = try? JSONSerialization.data(withJSONObject: json, options: .fragmentsAllowed)
+          
+            
+            let task = URLSession.shared.dataTask(with: baseRequest) { (data, _, error) in
+                guard let data = data else {
+                    return completion(false)
+                }
+                
+                do {
+                    let result = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                    if let result = result as? [String: Any], result["snapshot_id"] as? String != nil {
+                        completion(true)
+                    }else {
+                        completion(false)
+                    }
+                } catch {
+                    return completion(false)
+                }
+            }
+            task.resume()
+        }
+    }
+    
+    public func removeTrackToPlaylist(track: AudioTrack, completion: @escaping (Result<FeaturedPlaylist, Error>) -> Void){
+        createRequest(with: Endpoints.featuredPlaylistsURL.url, type: .GET) { (baseRequest) in
+            guard let baseRequest = baseRequest else {
+                return completion(.failure(ApiError.FailToGetData))
+            }
+            
+            let task = URLSession.shared.dataTask(with: baseRequest) { (data, _, error) in
+                guard let data = data else {
+                    return completion(.failure(error!))
+                }
+                
+                let decoder = JSONDecoder()
+                do {
+                    let result = try decoder.decode(FeaturedPlaylist.self, from: data)
+                    completion(.success(result))
+                } catch {
+                    return completion(.failure(error))
+                }
+            }
+            task.resume()
+        }
+    }
     
     public func getAllFeaturedPlaylists(completion: @escaping (Result<FeaturedPlaylist, Error>) -> Void){
         createRequest(with: Endpoints.featuredPlaylistsURL.url, type: .GET) { (baseRequest) in
@@ -311,6 +426,9 @@ class ApiService {
                 let decoder = JSONDecoder()
                 do {
                     let result = try decoder.decode(UserProfile.self, from: data)
+                    // save the userId to the local storage
+                    AuthManager.shared.saveUserId(userId: result.id)
+                    
                     completion(.success(result))
                 } catch {
                     return completion(.failure(error))
