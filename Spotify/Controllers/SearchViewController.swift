@@ -88,7 +88,7 @@ class SearchViewController: UIViewController, Dialog {
                 self.categoryList = model.categories.items
                 break
             case .failure(let error):
-                self.present(self.showErrorDialog(message: error.localizedDescription), animated: true, completion: nil)
+                self.present(self.showErrorDialog(message: error.localizedDescription), animated: true)
                 break
             }
             self.collectionView.reloadData()
@@ -162,7 +162,7 @@ extension SearchViewController: SearchResultViewControllerDelegate {
             let artist = artists[row]
             guard let url = URL(string: artist.externalURLs["spotify"] ?? "") else { return }
             let vc = SFSafariViewController(url: url)
-            present(vc, animated: true, completion: nil)
+            present(vc, animated: true)
         case .playlist(let playlists):
             let playlist = playlists[row]
             let vc = PlaylistViewController(playlist: playlist)

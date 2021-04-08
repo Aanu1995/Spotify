@@ -37,6 +37,7 @@ class LibraryPlaylistViewController: UIViewController, Dialog {
     
     private var playlists: [Playlist] = []
     private var error: Error?
+    public var selectedPlaylist: ((Playlist) -> Void)?
     
     // MARK: Lifecycle
     
@@ -64,7 +65,9 @@ class LibraryPlaylistViewController: UIViewController, Dialog {
         tableView.delegate = self
         tableView.dataSource = self
         noPlaylistsView.delegate = self
-        
+        if selectedPlaylist != nil {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(didTapCloseButton))
+        }
     }
     
     private func fetchUserPlaylists(){
@@ -82,7 +85,7 @@ class LibraryPlaylistViewController: UIViewController, Dialog {
                 self.playlists = model.items
             case .failure(let error):
                 self.error = error
-                self.present(self.showErrorDialog(message: error.localizedDescription), animated: true, completion: nil)
+                self.present(self.showErrorDialog(message: error.localizedDescription), animated: true)
             }
             self.updateUI()
         }
@@ -111,13 +114,13 @@ class LibraryPlaylistViewController: UIViewController, Dialog {
         alertVC.addTextField { (textField) in
             textField.placeholder = "Playlist..."
         }
-        alertVC.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alertVC.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         alertVC.addAction(UIAlertAction(title: "Create", style: .default, handler: { _ in
             guard let textfield = alertVC.textFields?.first, let text = textfield.text, !text.trimmingCharacters(in: .whitespaces).isEmpty else { return }
             ApiService.shared.createPlaylists(with: text, completion: self.isPlaylistAdded)
             
         }))
-        present(alertVC, animated: true, completion: nil)
+        present(alertVC, animated: true)
     }
     
     private func isPlaylistAdded(success: Bool) {
@@ -125,9 +128,13 @@ class LibraryPlaylistViewController: UIViewController, Dialog {
             if success {
                 self.fetchUserPlaylists()
             } else {
-               return self.present(self.showErrorDialog(message: "Failed to create playlist"), animated: true, completion: nil)
+               return self.present(self.showErrorDialog(message: "Failed to create playlist"), animated: true)
             }
         }
+    }
+    
+    @objc func didTapCloseButton(){
+        dismiss(animated: true)
     }
 }
 
@@ -165,7 +172,15 @@ extension LibraryPlaylistViewController: UITableViewDelegate, UITableViewDataSou
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let playlist = playlists[indexPath.row]
-        let vc = PlaylistViewController(playlist: playlist)
+        
+        // please treat as a call back
+        // this handles a callback when trying to add track to a playlist
+        if selectedPlaylist != nil {
+            selectedPlaylist?(playlist)
+            dismiss(animated: true)
+        }
+        
+        let vc = PlaylistViewController(playlist: playlist, isOwner: true)
         vc.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(vc, animated: true)
     }

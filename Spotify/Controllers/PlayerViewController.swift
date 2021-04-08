@@ -56,7 +56,7 @@ class PlayerViewController: UIViewController {
             height: view.height - view.safeAreaInsets.top - imageView.height - view.safeAreaInsets.bottom - 15
         )
         
-        imageView.sd_setImage(with: dataSource?.imageURL, completed: nil)
+        imageView.sd_setImage(with: dataSource?.imageURL)
         let viewModel = PlayViewControlsViewViewModel(title: dataSource?.songName, subTitle: dataSource?.subTitle)
         controlsView.configure(with: viewModel)
     }
@@ -78,7 +78,7 @@ class PlayerViewController: UIViewController {
     }
     
     @objc private func didTapClose(){
-     dismiss(animated: true, completion: nil)
+     dismiss(animated: true)
     }
     
     @objc private func didTapAction() {

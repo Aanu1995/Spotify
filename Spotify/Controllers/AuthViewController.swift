@@ -86,8 +86,8 @@ extension AuthViewController:  WKNavigationDelegate {
        // exchange the code for access token
         AuthManager.shared.exchangeCodeForToken(code: code) { [weak self] (success) in
             DispatchQueue.main.async {
-                self?.navigationController?.popViewController(animated: true)
                 self?.completionHandler?(success)
+                self?.navigationController?.popViewController(animated: true)
             }
         }
     }

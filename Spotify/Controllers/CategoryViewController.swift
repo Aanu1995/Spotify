@@ -88,7 +88,7 @@ class CategoryViewController: UIViewController, Dialog {
                 self.playlists = model.playlists.items
                 break
             case .failure(let error):
-                self.present(self.showErrorDialog(message: error.localizedDescription), animated: true, completion: nil)
+                self.present(self.showErrorDialog(message: error.localizedDescription), animated: true)
                 break
             }
             self.collectionView.reloadData()

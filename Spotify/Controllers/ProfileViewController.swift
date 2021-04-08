@@ -84,7 +84,7 @@ class ProfileViewController: UIViewController, Dialog {
         headerView.addSubview(imageView)
         imageView.center = headerView.center
         
-        imageView.sd_setImage(with: url, completed: nil)
+        imageView.sd_setImage(with: url)
         tableView.tableHeaderView = headerView
     }
     

@@ -57,7 +57,8 @@ class HomeViewController: UIViewController, Dialog {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .done, target: self, action: #selector(didTapSettings))
     }
     
-    private func addGestureRecognizer(){
+    // when track is long pressed should open the action sheet to ask if they want to add track
+    private func addGestureRecognizer() {
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress(_:)))
         collectionView.addGestureRecognizer(gesture)
     }
@@ -72,9 +73,35 @@ class HomeViewController: UIViewController, Dialog {
         
         let track = audioTracks[indexPath.row]
         let actionSheet = UIAlertController(title: track.name, message: "Would you like to add this to a playlist?", preferredStyle: .actionSheet)
-        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        actionSheet.addAction(UIAlertAction(title: "Add to Playlist", style: .default, handler: nil))
-        present(actionSheet, animated: true, completion: nil)
+        // Cancel action button
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        // add to Playlist action button
+        actionSheet.addAction(UIAlertAction(title: "Add to Playlist", style: .default, handler: { [weak self] _ in
+            guard let strongSelf = self else { return }
+            
+            DispatchQueue.main.async {
+                // open the list of users playlists and select the playlist to add track
+                let vc = LibraryPlaylistViewController()
+                vc.title = track.name
+                // A callback to notify when the playlist is selected
+                vc.selectedPlaylist = { playlist in
+                    // make a server call to add the track to playlist
+                    ApiService.shared.addTrackToPlaylist(playlistId: playlist.id, track: track) { success in
+                        DispatchQueue.main.async {
+                            if !success {
+                                strongSelf.present(strongSelf.showErrorDialog(message: "Could not add track to playlist"), animated: true)
+                            }
+                        }
+                    }
+                }
+                strongSelf.present(UINavigationController(rootViewController: vc), animated: true)
+            }
+        }))
+        present(actionSheet, animated: true)
+    }
+    
+    private func showError(message: String){
+       
     }
     
     private func configureCollectionView(){
@@ -173,7 +200,7 @@ class HomeViewController: UIViewController, Dialog {
         group.notify(queue: .main) {
             self.spinner.stopAnimating()
             if let error = currentError {
-                self.present(self.showErrorDialog(message: error.localizedDescription), animated: true, completion: nil)
+                self.present(self.showErrorDialog(message: error.localizedDescription), animated: true)
                 return
             }
             guard let albums = newRelease?.albums.items,

@@ -82,7 +82,7 @@ class AlbumViewController: UIViewController, Dialog {
                 self.audioTracks = model.tracks.items
                 break
             case .failure(let error):
-                self.present(self.showErrorDialog(message: error.localizedDescription), animated: true, completion: nil)
+                self.present(self.showErrorDialog(message: error.localizedDescription), animated: true)
                 break
             }
             self.collectionView.reloadData()

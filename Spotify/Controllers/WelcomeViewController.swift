@@ -56,12 +56,12 @@ class WelcomeViewController: UIViewController, Dialog {
         guard success else {
             let message = "Something went wrong when signing in. Please try again"
             // show error dialog
-            present(showErrorDialog(title: "Oops", message: message), animated: true, completion: nil)
+            present(showErrorDialog(title: "Oops", message: message), animated: true)
             return
         }
         
         let vc = TabBarViewController()
         vc.modalPresentationStyle = .fullScreen
-        present(vc, animated: true, completion: nil)
+        present(vc, animated: true)
     }
 }

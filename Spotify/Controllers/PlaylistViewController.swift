@@ -8,10 +8,13 @@
 import UIKit
 
 class PlaylistViewController: UIViewController, Dialog {
-    private let playlist: Playlist
     
-    init(playlist: Playlist) {
+    private let playlist: Playlist
+    private let isOwner: Bool
+    
+    init(playlist: Playlist, isOwner: Bool = false) {
         self.playlist = playlist
+        self.isOwner = isOwner
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -45,6 +48,7 @@ class PlaylistViewController: UIViewController, Dialog {
         super.viewDidLoad()
         configureUI()
         fetchData()
+        addLongPressGesture()
     }
     
     override func viewDidLayoutSubviews() {
@@ -69,17 +73,36 @@ class PlaylistViewController: UIViewController, Dialog {
         collectionView.dataSource = self
     }
     
-    @objc private func didTapShare(){
-        guard let url = URL(string: playlist.externalURLs["spotify"] ?? "") else {
-            return
+    private func addLongPressGesture(){
+        if isOwner{
+            let gesture = UILongPressGestureRecognizer(target: self, action: #selector(onLongPressed(gesture:)))
+            collectionView.addGestureRecognizer(gesture)
         }
+    }
+    
+    @objc func onLongPressed(gesture: UILongPressGestureRecognizer){
+        let torchPoint = gesture.location(in: collectionView)
+        guard let indexPath = collectionView.indexPathForItem(at: torchPoint) else { return }
+        let track = audioTracks[indexPath.row]
+        let vc = UIAlertController(title: track.name, message: "Are you sure you want to remove the track from the playlist?", preferredStyle: .actionSheet)
         
-        let vc = UIActivityViewController(
-            activityItems: ["Check out the cool playlist on Spotify", url],
-            applicationActivities: []
-        )
-        vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
-        present(vc, animated: true, completion: nil)
+        vc.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        vc.addAction(UIAlertAction(title: "Remove", style: .destructive, handler: { [weak self] _ in
+            guard let strongSelf = self else { return }
+            
+            ApiService.shared.removeTrackFromPlaylist(playlistId: self!.playlist.id, track: track) { success in
+                DispatchQueue.main.async {
+                    if success {
+                        strongSelf.audioTracks.remove(at: indexPath.row)
+                        strongSelf.collectionView.deleteItems(at: [indexPath])
+                    }else {
+                        strongSelf.present(strongSelf.showErrorDialog(message:  "Could not remove track from playlist"), animated: true)
+                       
+                    }
+                }
+            }
+        }))
+        present(vc, animated: true)
     }
     
     private func fetchData(){
@@ -96,7 +119,7 @@ class PlaylistViewController: UIViewController, Dialog {
                 self.audioTracks = model.tracks.items.map({$0.track})
                 break
             case .failure(let error):
-                self.present(self.showErrorDialog(message: error.localizedDescription), animated: true, completion: nil)
+                self.present(self.showErrorDialog(message: error.localizedDescription), animated: true)
                 break
             }
             self.collectionView.reloadData()
@@ -122,6 +145,19 @@ class PlaylistViewController: UIViewController, Dialog {
         ]
         
         return layoutSection
+    }
+    
+    @objc private func didTapShare(){
+        guard let url = URL(string: playlist.externalURLs["spotify"] ?? "") else {
+            return
+        }
+        
+        let vc = UIActivityViewController(
+            activityItems: ["Check out the cool playlist on Spotify", url],
+            applicationActivities: []
+        )
+        vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+        present(vc, animated: true)
     }
 
 }
@@ -163,6 +199,8 @@ extension PlaylistViewController: UICollectionViewDelegate, UICollectionViewData
         let track = audioTracks[indexPath.row]
         PlayerPresenter.shared.startPlayback(from: self, track: track)
     }
+    
+    
 }
 
 //
