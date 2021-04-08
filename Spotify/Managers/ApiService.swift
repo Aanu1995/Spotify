@@ -19,6 +19,7 @@ class ApiService {
         case POST
         case DELETE
         case UPDATE
+        case PUT
     }
     
     private enum ApiError: Error {
@@ -30,6 +31,8 @@ class ApiService {
    private enum Endpoints {
         case currentProfileURL
         case currentUserPlaylistURL
+        case currentUserAlbumURL
+        case currentSaveUserAlbumURL(id: String)
         case newReleasesURL
         case featuredPlaylistsURL
         case recommendedGenreURL
@@ -46,6 +49,8 @@ class ApiService {
             switch self {
                 case .currentProfileURL: return baseAPIURL + "/me"
                 case .currentUserPlaylistURL: return  baseAPIURL + "/me/playlists"
+                case .currentUserAlbumURL: return  baseAPIURL + "/me/albums"
+                case .currentSaveUserAlbumURL(let albumId): return  baseAPIURL + "/me/albums?ids=\(albumId)"
                 case .newReleasesURL: return baseAPIURL + "/browse/new-releases?limit=50"
                 case .featuredPlaylistsURL: return baseAPIURL + "/browse/featured-playlists?limit=50"
                 case .recommendedGenreURL: return baseAPIURL + "/recommendations/available-genre-seeds"
@@ -104,6 +109,46 @@ class ApiService {
                 let decoder = JSONDecoder()
                 do {
                     let result = try decoder.decode(AlbumDetailResponse.self, from: data)
+                    completion(.success(result))
+                } catch {
+                    return completion(.failure(error))
+                }
+            }
+            task.resume()
+        }
+    }
+    
+    public func saveAlbum(album: Album, completion: @escaping (Bool) -> Void){
+        createRequest(with: Endpoints.currentSaveUserAlbumURL(id: album.id).url, type: .PUT) { (baseRequest) in
+            guard let baseRequest = baseRequest else {
+                return completion(false)
+            }
+          
+            let task = URLSession.shared.dataTask(with: baseRequest) { (data, response, error) in
+                guard let _ = data, let response = response as? HTTPURLResponse else {
+                    return completion(false)
+                }
+                print(response.statusCode)
+                completion(response.statusCode == 200)
+            }
+            task.resume()
+        }
+    }
+    
+    public func getCurrentUserAlbums(completion: @escaping (Result<LibraryAlbumResponse, Error>) -> Void){
+        createRequest(with: Endpoints.currentUserAlbumURL.url, type: .GET) { (baseRequest) in
+            guard let baseRequest = baseRequest else {
+                return completion(.failure(ApiError.FailToGetData))
+            }
+            
+            let task = URLSession.shared.dataTask(with: baseRequest) { (data, _, error) in
+                guard let data = data else {
+                    return completion(.failure(error!))
+                }
+                
+                let decoder = JSONDecoder()
+                do {
+                    let result = try decoder.decode(LibraryAlbumResponse.self, from: data)
                     completion(.success(result))
                 } catch {
                     return completion(.failure(error))

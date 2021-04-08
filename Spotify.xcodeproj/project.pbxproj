@@ -38,6 +38,7 @@
 		CE74231F2618E15D009CFC5B /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE74231E2618E15D009CFC5B /* SearchResult.swift */; };
 		CE7A78E62616AB5800A68DFB /* TitleHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7A78E52616AB5800A68DFB /* TitleHeaderCollectionReusableView.swift */; };
 		CE918B1F2611680F00C427BC /* ImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE918B1E2611680F00C427BC /* ImageModel.swift */; };
+		CE94E316261F80AB00F0DE07 /* LibraryAlbumResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE94E315261F80AB00F0DE07 /* LibraryAlbumResponse.swift */; };
 		CEBFD6F1260A433B00619DB1 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBFD6F0260A433B00619DB1 /* AuthViewController.swift */; };
 		CEBFD6F4260A434900619DB1 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBFD6F3260A434900619DB1 /* WelcomeViewController.swift */; };
 		CEBFD6F7260A437D00619DB1 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBFD6F6260A437D00619DB1 /* SettingsViewController.swift */; };
@@ -107,6 +108,7 @@
 		CE74231E2618E15D009CFC5B /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		CE7A78E52616AB5800A68DFB /* TitleHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
 		CE918B1E2611680F00C427BC /* ImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModel.swift; sourceTree = "<group>"; };
+		CE94E315261F80AB00F0DE07 /* LibraryAlbumResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryAlbumResponse.swift; sourceTree = "<group>"; };
 		CEBFD6F0260A433B00619DB1 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		CEBFD6F3260A434900619DB1 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		CEBFD6F6260A437D00619DB1 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 				CE659D5A2618533800685FD5 /* Category.swift */,
 				CE74231B2618DDD0009CFC5B /* SearchResultResponse.swift */,
 				CE74231E2618E15D009CFC5B /* SearchResult.swift */,
+				CE94E315261F80AB00F0DE07 /* LibraryAlbumResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -478,6 +481,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CEE263292617627500A25F11 /* CategoryCellViewModel.swift in Sources */,
+				CE94E316261F80AB00F0DE07 /* LibraryAlbumResponse.swift in Sources */,
 				CEBFD6F4260A434900619DB1 /* WelcomeViewController.swift in Sources */,
 				CE5F3EE8261200A5008C2484 /* FeaturedPlaylist.swift in Sources */,
 				CED9918B2616041B0087595C /* HeaderCollectionReusableView.swift in Sources */,

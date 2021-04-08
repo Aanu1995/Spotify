@@ -9,6 +9,15 @@ import UIKit
 
 class AlbumViewController: UIViewController, Dialog {
     private let album: Album
+  
+    init(album: Album) {
+        self.album = album
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: Properties
     
@@ -28,16 +37,6 @@ class AlbumViewController: UIViewController, Dialog {
     }()
     
     private var audioTracks: [AudioTrack] = []
-  
-    
-    init(album: Album) {
-        self.album = album
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     // MARK: Lifecycle
     
@@ -58,6 +57,7 @@ class AlbumViewController: UIViewController, Dialog {
     private func configureUI(){
         title = album.name
         view.backgroundColor = .systemBackground
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(didTapAction))
        
         view.addSubview(collectionView)
         view.addSubview(spinner)
@@ -66,6 +66,24 @@ class AlbumViewController: UIViewController, Dialog {
         collectionView.backgroundColor = .systemBackground
         collectionView.delegate = self
         collectionView.dataSource = self
+    }
+    
+    @objc func didTapAction(){
+        let actionVC = UIAlertController(title: album.name, message: "Actions", preferredStyle: .actionSheet)
+        actionVC.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        actionVC.addAction(UIAlertAction(title: "Save Album", style: .default, handler: { [weak self] _ in
+            guard let strongSelf = self else { return }
+            ApiService.shared.saveAlbum(album: strongSelf.album) {success in
+                DispatchQueue.main.async {
+                    if success{
+                        NotificationCenter.default.post(name: .albumSaveNotification, object: nil)
+                    } else {
+                        strongSelf.present(strongSelf.showErrorDialog(message: "Could not save the album"), animated: true)
+                    }
+                }
+            }
+        }))
+        present(actionVC, animated: true)
     }
     
     private func fetchData(){
