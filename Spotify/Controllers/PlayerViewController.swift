@@ -95,14 +95,17 @@ extension PlayerViewController: PlayerControlsViewDelegate {
     }
     
     func playerControlsViewDidTapPlayPauseButton(_ controlView: PlayerControlsView) {
+        HapticManager.shared.vibrateForSelection()
         delegate?.playerViewControllerDelegateDidTapPlayPause()
     }
     
     func playerControlsViewDidTapBackwardButton(_ controlView: PlayerControlsView) {
+        HapticManager.shared.vibrateForSelection()
         delegate?.playerViewControllerDelegateDidTapBackward()
     }
     
     func playerControlsViewDidTapNextutton(_ controlView: PlayerControlsView) {
+        HapticManager.shared.vibrateForSelection()
         delegate?.playerViewControllerDelegateDidTapForward()
     }
 }

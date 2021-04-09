@@ -16,9 +16,40 @@ class WelcomeViewController: UIViewController, Dialog {
         button.backgroundColor = .white
         button.setTitle("Sign In with Spotify", for: .normal)
         button.layer.cornerRadius = 5
-        button.setTitleColor(.blue, for: .normal)
+        button.setTitleColor(.black, for: .normal)
         
         return button
+    }()
+    
+    private let backgroundImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.image = UIImage(named: "album")
+        return imageView
+    }()
+    
+    private let overlayView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .black
+        view.alpha = 0.7
+        return view
+    }()
+    
+    private let logoImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.image = UIImage(named: "Logo")
+        return imageView
+    }()
+    
+    private let label: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.textColor = .white
+        label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 32, weight: .semibold)
+        label.text = "Listen to millions \nof songs on \nthe go"
+        return label
     }()
 
     
@@ -28,15 +59,25 @@ class WelcomeViewController: UIViewController, Dialog {
         super.viewDidLoad()
 
         title = "Spotify"
-        view.backgroundColor = .systemGreen
+        let titleAttributes: [NSAttributedString.Key : Any] = [.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.largeTitleTextAttributes = titleAttributes
+        view.backgroundColor = .systemBackground
+        view.addSubview(backgroundImage)
+        view.addSubview(overlayView)
+        view.addSubview(logoImage)
+        view.addSubview(label)
         view.addSubview(signInButton)
         signInButton.addTarget(self, action: #selector(signIn(_:)), for: .touchUpInside)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        backgroundImage.frame = view.bounds
+        overlayView.frame = view.bounds
         let y = view.height - 45 - 8 - view.safeAreaInsets.bottom
         signInButton.frame = CGRect(x: 20, y: y, width: view.width - 40, height: 45)
+        logoImage.frame = CGRect(x: (view.width - 120)/2, y: (view.height - 240)/2, width: 120, height: 120)
+        label.frame = CGRect(x: 30, y: logoImage.bottom + 30, width: view.width - 60, height: 120)
     }
    
     // MARK: Methods

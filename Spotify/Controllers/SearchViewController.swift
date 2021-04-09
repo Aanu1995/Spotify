@@ -20,6 +20,13 @@ class SearchViewController: UIViewController, Dialog {
         return vc
     }()
     
+    private let spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView()
+        spinner.tintColor = .label
+        spinner.hidesWhenStopped = true
+        return spinner
+    }()
+    
     private let collectionView: UICollectionView = {
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewCompositionalLayout(sectionProvider: { (_, _) -> NSCollectionLayoutSection? in
@@ -37,13 +44,6 @@ class SearchViewController: UIViewController, Dialog {
         return collectionView
     }()
     
-    private let spinner: UIActivityIndicatorView = {
-        let spinner = UIActivityIndicatorView()
-        spinner.tintColor = .label
-        spinner.hidesWhenStopped = true
-        return spinner
-    }()
-    
     private var categoryList: [Category] = []
     
     
@@ -58,6 +58,7 @@ class SearchViewController: UIViewController, Dialog {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         collectionView.frame = view.bounds
+        spinner.center = view.center
     }
     
     // MARK: Methods
@@ -100,8 +101,10 @@ class SearchViewController: UIViewController, Dialog {
             DispatchQueue.main.async {
                 switch result{
                 case .success(let results):
+                    HapticManager.shared.vibrate(for: .success)
                     return viewController.update(with: results)
                 case .failure:
+                    HapticManager.shared.vibrate(for: .error)
                     break
                 }
             }
@@ -139,6 +142,7 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        HapticManager.shared.vibrateForSelection()
         let category = categoryList[indexPath.row]
         let vc = CategoryViewController(category: category)
         vc.navigationItem.largeTitleDisplayMode = .never

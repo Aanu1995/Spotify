@@ -28,7 +28,7 @@ class PlaylistViewController: UIViewController, Dialog {
     private let collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewCompositionalLayout(sectionProvider: { (_, _) -> NSCollectionLayoutSection? in
             return PlaylistViewController.sectionLayout()
-        })
+            })
         )
         return collectionView
     }()
@@ -54,7 +54,7 @@ class PlaylistViewController: UIViewController, Dialog {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         collectionView.frame = view.bounds
-        spinner.center = view.center
+        spinner.center = CGPoint(x: view.center.x, y: view.width + (view.height - view.width)/2)
     }
     
     // MARK: Methods
@@ -112,7 +112,7 @@ class PlaylistViewController: UIViewController, Dialog {
     
     private func onDetailPlaylistFetched(result: Result<PlaylistDetailResponse, Error>){
         DispatchQueue.main.async {
-            self.spinner.stopAnimating()
+           self.spinner.stopAnimating()
             
             switch result{
             case .success(let model):
@@ -122,7 +122,7 @@ class PlaylistViewController: UIViewController, Dialog {
                 self.present(self.showErrorDialog(message: error.localizedDescription), animated: true)
                 break
             }
-            self.collectionView.reloadData()
+          self.collectionView.reloadData()
         }
     }
     
@@ -195,6 +195,7 @@ extension PlaylistViewController: UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        HapticManager.shared.vibrateForSelection()
         collectionView.deselectItem(at: indexPath, animated: true)
         let track = audioTracks[indexPath.row]
         PlayerPresenter.shared.startPlayback(from: self, track: track)

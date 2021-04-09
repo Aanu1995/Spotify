@@ -61,7 +61,27 @@ class SettingsViewController: UIViewController {
     }
     
     private func signOut(){
-       
+        let actionSheet = UIAlertController(title: "Sign Out", message: "Are you sure?", preferredStyle: .alert)
+        
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        actionSheet.addAction(UIAlertAction(title: "Sign out", style: .destructive, handler: { _ in
+           
+            AuthManager.shared.signOut { [weak self] success in
+                guard let strongSelf = self else { return }
+                DispatchQueue.main.async {
+                    if success {
+                        let navC = UINavigationController(rootViewController: WelcomeViewController())
+                        navC.viewControllers.first?.navigationItem.largeTitleDisplayMode = .always
+                        navC.navigationBar.prefersLargeTitles = true
+                        navC.modalPresentationStyle = .fullScreen
+                        strongSelf.present(navC, animated: true, completion: {
+                            strongSelf.navigationController?.popToRootViewController(animated: false)
+                        })
+                    }
+                }
+            }
+        }))
+        present(actionSheet, animated: true)
     }
     
 }
@@ -86,6 +106,7 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        HapticManager.shared.vibrateForSelection()
         let model = sections[indexPath.section].options[indexPath.row]
         model.handler()
         tableView.deselectRow(at: indexPath, animated: true)

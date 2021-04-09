@@ -88,7 +88,10 @@ class HomeViewController: UIViewController, Dialog {
                     // make a server call to add the track to playlist
                     ApiService.shared.addTrackToPlaylist(playlistId: playlist.id, track: track) { success in
                         DispatchQueue.main.async {
-                            if !success {
+                            if success {
+                                HapticManager.shared.vibrate(for: .success)
+                            } else {
+                                HapticManager.shared.vibrate(for: .error)
                                 strongSelf.present(strongSelf.showErrorDialog(message: "Could not add track to playlist"), animated: true)
                             }
                         }
@@ -98,10 +101,6 @@ class HomeViewController: UIViewController, Dialog {
             }
         }))
         present(actionSheet, animated: true)
-    }
-    
-    private func showError(message: String){
-       
     }
     
     private func configureCollectionView(){
@@ -382,6 +381,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let section = sections[indexPath.section]
+        HapticManager.shared.vibrateForSelection()
         
         switch section {
         case .newReleases:

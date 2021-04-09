@@ -87,7 +87,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if(AuthManager.shared.isSignedIn){
             AuthManager.shared.refreshIfNeeded(completionHandler: nil)
             window.rootViewController = TabBarViewController()
-        }else {
+        } else {
             let navC = UINavigationController(rootViewController: WelcomeViewController())
             navC.viewControllers.first?.navigationItem.largeTitleDisplayMode = .always
             navC.navigationBar.prefersLargeTitles = true

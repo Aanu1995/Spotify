@@ -49,7 +49,7 @@ class AlbumViewController: UIViewController, Dialog {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         collectionView.frame = view.bounds
-        spinner.center = view.center
+        spinner.center = CGPoint(x: view.center.x, y: view.width + (view.height - view.width)/2)
     }
     
     // MARK: Methods
@@ -76,8 +76,10 @@ class AlbumViewController: UIViewController, Dialog {
             ApiService.shared.saveAlbum(album: strongSelf.album) {success in
                 DispatchQueue.main.async {
                     if success{
+                        HapticManager.shared.vibrate(for: .success)
                         NotificationCenter.default.post(name: .albumSaveNotification, object: nil)
                     } else {
+                        HapticManager.shared.vibrate(for: .error)
                         strongSelf.present(strongSelf.showErrorDialog(message: "Could not save the album"), animated: true)
                     }
                 }
@@ -162,6 +164,7 @@ extension AlbumViewController: UICollectionViewDelegate, UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        HapticManager.shared.vibrateForSelection()
         let track = audioTracks[indexPath.row]
         collectionView.deselectItem(at: indexPath, animated: true)
         PlayerPresenter.shared.startPlayback(from: self, track: track, isTrackFromAlbum: true, albumImageURL: URL(string: album.images.first?.url ?? ""))

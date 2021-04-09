@@ -51,7 +51,6 @@ class CategoryViewController: UIViewController, Dialog {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureUI()
         fetchData()
     }
@@ -117,6 +116,7 @@ extension CategoryViewController: UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        HapticManager.shared.vibrateForSelection()
         let playlist = playlists[indexPath.row]
         let vc = PlaylistViewController(playlist: playlist)
         vc.navigationItem.largeTitleDisplayMode = .never
